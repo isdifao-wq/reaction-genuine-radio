@@ -1,0 +1,1153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reaction Genuine Radio — Real Music. Genuine Vibes. 24/7.</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=Bebas+Neue&family=Space+Mono:wght@400;700&display=swap');
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --black:#060606;--panel:#0F0F0F;--deep:#0A0A0A;
+  --gold:#C9A84C;--gold-lt:#E2C46A;--gold-dk:#7A6330;
+  --red:#8B1A1A;--red-br:#B82020;
+  --offwhite:#F0EDE8;--grey:#888;
+  --border:rgba(201,168,76,0.15);--border2:rgba(201,168,76,0.07);
+}
+html{scroll-behavior:smooth}
+body{background:var(--black);color:var(--offwhite);font-family:'Inter',sans-serif;overflow-x:hidden;padding-bottom:100px}
+
+/* ════════════════════════ STICKY PLAYER ════════════════════════ */
+#playerBar{
+  position:fixed;bottom:0;left:0;right:0;z-index:500;
+  height:90px;
+  background:rgba(5,5,5,0.98);
+  backdrop-filter:blur(24px);
+  border-top:1px solid var(--border);
+  display:flex;align-items:center;
+}
+.pb-art{
+  width:90px;height:90px;flex-shrink:0;
+  background:linear-gradient(140deg,var(--red),#150404);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:2px;color:var(--gold);
+  border-right:1px solid var(--border);cursor:pointer;position:relative;
+}
+.pb-live-ring{
+  position:absolute;inset:0;
+  border:2px solid transparent;
+  animation:ring-pulse 2s ease-in-out infinite;
+}
+@keyframes ring-pulse{
+  0%,100%{border-color:rgba(184,32,32,0)}
+  50%{border-color:rgba(184,32,32,0.6)}
+}
+.pb-info{padding:0 18px;min-width:200px;max-width:260px;border-right:1px solid var(--border);height:100%;display:flex;flex-direction:column;justify-content:center;gap:2px}
+.pb-show-badge{font-size:7.5px;font-weight:700;letter-spacing:2.5px;color:var(--red-br);text-transform:uppercase;margin-bottom:2px}
+.pb-track{font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;color:var(--offwhite);line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:220px}
+.pb-artist{font-size:11px;color:var(--gold)}
+
+.pb-controls{display:flex;align-items:center;gap:8px;padding:0 18px;border-right:1px solid var(--border);height:100%}
+.pb-btn{
+  width:34px;height:34px;border-radius:50%;
+  background:transparent;border:1px solid rgba(240,237,232,0.12);
+  color:var(--offwhite);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .2s;font-size:12px;
+}
+.pb-btn:hover{border-color:var(--gold);color:var(--gold)}
+.pb-btn.main-play{
+  width:48px;height:48px;background:var(--gold);
+  border-color:var(--gold);color:var(--black);font-size:18px;
+  transition:background .2s,transform .1s;
+}
+.pb-btn.main-play:hover{background:var(--gold-lt);transform:scale(1.05)}
+.pb-btn.main-play.playing{background:var(--red-br);border-color:var(--red-br);color:#fff}
+
+.pb-timeline{flex:1;padding:0 22px;display:flex;flex-direction:column;justify-content:center;gap:7px}
+.pb-times{display:flex;justify-content:space-between}
+.pb-t{font-family:'Space Mono',monospace;font-size:8.5px;color:var(--grey)}
+.pb-bar{
+  width:100%;height:4px;background:rgba(255,255,255,0.08);
+  border-radius:2px;cursor:pointer;position:relative;
+}
+.pb-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--red-br));border-radius:2px;width:0%;transition:width .4s linear;pointer-events:none}
+.pb-thumb{position:absolute;top:50%;transform:translate(-50%,-50%);width:11px;height:11px;border-radius:50%;background:var(--gold);border:2px solid var(--black);pointer-events:none;left:0%}
+
+.pb-vol{display:flex;align-items:center;gap:8px;padding:0 16px;border-left:1px solid var(--border);height:100%}
+.pb-vol-icon{color:var(--grey);cursor:pointer;font-size:15px;transition:color .2s}
+.pb-vol-icon:hover{color:var(--gold)}
+input[type=range].vol-slider{
+  -webkit-appearance:none;appearance:none;
+  width:72px;height:3px;background:rgba(255,255,255,0.12);border-radius:2px;cursor:pointer;outline:none;
+}
+input[type=range].vol-slider::-webkit-slider-thumb{-webkit-appearance:none;width:11px;height:11px;border-radius:50%;background:var(--gold);border:2px solid var(--black);cursor:pointer}
+
+.pb-up-next{padding:0 16px;height:100%;border-left:1px solid var(--border);display:flex;flex-direction:column;justify-content:center;gap:3px;min-width:150px}
+.pb-un-lbl{font-size:7px;font-weight:700;letter-spacing:2.5px;color:var(--grey);text-transform:uppercase}
+.pb-un-track{font-size:11.5px;color:var(--offwhite);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:140px}
+
+/* ════════════════════════ NAV ════════════════════════ */
+nav{
+  position:fixed;inset:0 0 auto 0;z-index:400;
+  height:66px;display:flex;align-items:center;justify-content:space-between;
+  padding:0 48px;
+  background:rgba(6,6,6,0.96);backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+}
+.nav-logo{display:flex;align-items:center;gap:12px;text-decoration:none}
+.nav-badge{
+  width:40px;height:40px;flex-shrink:0;
+  background:linear-gradient(135deg,var(--red),#400A0A);
+  border:1.5px solid var(--gold);
+  clip-path:polygon(50% 0%,95% 14%,100% 58%,76% 96%,24% 96%,0% 58%,5% 14%);
+  display:flex;align-items:center;justify-content:center;
+}
+.nav-badge span{font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:1px;color:var(--gold)}
+.nav-wm{display:flex;flex-direction:column;gap:1px}
+.nav-wm .t{font-family:'Bebas Neue',sans-serif;font-size:14.5px;letter-spacing:3.5px;color:var(--offwhite);line-height:1}
+.nav-wm .b{font-size:7.5px;letter-spacing:2.5px;color:var(--gold);text-transform:uppercase}
+.nav-links{display:flex;gap:28px;list-style:none}
+.nav-links a{font-size:10px;font-weight:600;letter-spacing:1.8px;text-transform:uppercase;color:var(--grey);text-decoration:none;transition:color .2s}
+.nav-links a:hover,.nav-links a.act{color:var(--gold)}
+.nav-right{display:flex;align-items:center;gap:12px}
+.air-pill{display:flex;align-items:center;gap:7px;background:rgba(139,26,26,0.18);border:1px solid rgba(184,32,32,0.38);padding:5px 13px}
+.airdot{width:7px;height:7px;border-radius:50%;background:var(--red-br);animation:pls 1.4s ease-in-out infinite}
+@keyframes pls{0%{box-shadow:0 0 0 0 rgba(184,32,32,.7)}70%{box-shadow:0 0 0 7px rgba(184,32,32,0)}100%{box-shadow:0 0 0 0 rgba(184,32,32,0)}}
+.air-lbl{font-size:8.5px;font-weight:800;letter-spacing:2.5px;color:var(--red-br);text-transform:uppercase}
+.btn-nav{background:var(--gold);color:var(--black);border:none;padding:8px 18px;font-size:9px;font-weight:800;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:background .2s}
+.btn-nav:hover{background:var(--gold-lt)}
+
+/* ════════════════════════ TICKER ════════════════════════ */
+.ticker{position:fixed;top:66px;left:0;right:0;z-index:399;height:28px;background:var(--red);display:flex;align-items:center;overflow:hidden;border-bottom:1px solid rgba(201,168,76,0.18)}
+.ticker-tag{background:var(--gold);color:var(--black);font-size:7.5px;font-weight:900;letter-spacing:2.5px;padding:0 14px;height:100%;display:flex;align-items:center;white-space:nowrap;flex-shrink:0}
+.ticker-roll{display:flex;white-space:nowrap;animation:roll 30s linear infinite}
+.ticker-roll span{font-size:10px;font-weight:500;padding:0 28px;color:rgba(255,255,255,.92)}
+.ticker-roll .d{color:var(--gold)}
+@keyframes roll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ════════════════════════ SECTION SYSTEM ════════════════════════ */
+.page-section{padding:80px 48px;scroll-margin-top:100px}
+.s-alt{background:var(--panel)}
+.s-deep{background:var(--deep)}
+.eyebrow{font-size:8.5px;font-weight:700;letter-spacing:4px;color:var(--gold);text-transform:uppercase;display:flex;align-items:center;gap:14px;margin-bottom:18px}
+.eyebrow::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--border),transparent)}
+.sec-h{font-family:'Bebas Neue',sans-serif;font-size:clamp(28px,4vw,50px);letter-spacing:3px;color:var(--offwhite);line-height:1.0;margin-bottom:0}
+.sec-h .g{color:var(--gold)}.sec-h .r{color:var(--red-br)}
+.sec-intro{font-size:13px;color:var(--grey);line-height:1.8;max-width:560px;margin-top:12px}
+
+/* ════════════════════════ HERO ════════════════════════ */
+.hero{min-height:100vh;padding:130px 48px 90px;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden}
+.h-bg{position:absolute;inset:0;background:radial-gradient(ellipse 65% 55% at 62% 52%,rgba(139,26,26,.13) 0%,transparent 65%),radial-gradient(ellipse 35% 40% at 88% 16%,rgba(201,168,76,.05) 0%,transparent 55%),#060606}
+.h-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(201,168,76,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(201,168,76,.025) 1px,transparent 1px);background-size:60px 60px}
+.h-vinyl{position:absolute;right:-80px;top:50%;transform:translateY(-50%);z-index:1}
+.vdisc{width:460px;height:460px;border-radius:50%;background:radial-gradient(circle at 50%,#1C1C1C 0%,#0D0D0D 18%,#181818 19%,#090909 36%,#151515 37%,#090909 54%,#141414 55%,#070707 100%);box-shadow:0 0 90px rgba(139,26,26,.18),0 0 180px rgba(0,0,0,.9);animation:vspin 20s linear infinite;position:relative}
+.vdisc::before{content:'';position:absolute;inset:0;border-radius:50%;background:repeating-radial-gradient(circle at 50%,transparent 0,transparent 3px,rgba(201,168,76,.03) 3px,rgba(201,168,76,.03) 4px)}
+.vlabel{position:absolute;width:138px;height:138px;top:50%;left:50%;transform:translate(-50%,-50%);border-radius:50%;background:linear-gradient(140deg,var(--red),#250606);border:2px solid rgba(201,168,76,.3);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+.vlabel .vr{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:4px;color:var(--gold);line-height:1}
+.vlabel .vs{font-size:6px;letter-spacing:2px;color:rgba(201,168,76,.5);text-transform:uppercase}
+.vhole{position:absolute;width:11px;height:11px;top:50%;left:50%;transform:translate(-50%,-50%);border-radius:50%;background:#020202}
+@keyframes vspin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+#hEq{position:absolute;bottom:0;left:0;right:0;height:110px;z-index:1;opacity:.6}
+
+.h-content{position:relative;z-index:2;max-width:620px}
+.h-ey{font-size:8.5px;font-weight:700;letter-spacing:4px;color:var(--gold);text-transform:uppercase;display:flex;align-items:center;gap:12px;margin-bottom:22px}
+.h-ey::before{content:'';width:28px;height:1px;background:var(--gold)}
+.h-logo-wrap{margin-bottom:20px}
+.h-svg{width:clamp(170px,25vw,310px)}
+.h-full{font-family:'Bebas Neue',sans-serif;font-size:clamp(10px,1.2vw,14px);letter-spacing:5px;color:rgba(240,237,232,.38);margin-top:4px;display:block}
+.h-tag{font-family:'Bebas Neue',sans-serif;font-size:clamp(16px,2.2vw,28px);letter-spacing:3px;line-height:1.2;color:var(--offwhite);margin-top:10px;margin-bottom:22px}
+.h-tag .g{color:var(--gold)}.h-tag .r{color:var(--red-br)}
+.h-desc{font-size:13.5px;color:rgba(240,237,232,.65);line-height:1.85;margin-bottom:36px;max-width:500px}
+.h-desc strong{color:var(--gold)}
+.h-btns{display:flex;gap:14px;flex-wrap:wrap}
+.btn-p{background:var(--gold);color:var(--black);border:none;padding:13px 32px;font-size:9.5px;font-weight:800;letter-spacing:2.5px;text-transform:uppercase;cursor:pointer;transition:background .2s,transform .15s;text-decoration:none;display:inline-block}
+.btn-p:hover{background:var(--gold-lt);transform:translateY(-2px)}
+.btn-o{background:transparent;color:var(--offwhite);border:1px solid rgba(240,237,232,0.2);padding:13px 32px;font-size:9.5px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;cursor:pointer;transition:all .2s;text-decoration:none;display:inline-block}
+.btn-o:hover{border-color:var(--gold);color:var(--gold)}
+
+/* ════════════════════════ NOW PLAYING ════════════════════════ */
+.np-card{margin-top:36px;display:grid;grid-template-columns:82px 1fr auto;gap:24px;align-items:center;background:#090909;border:1px solid var(--border);border-left:3px solid var(--gold);padding:26px 30px}
+.np-art{width:82px;height:82px;background:linear-gradient(140deg,var(--red),#1A0505);border:1px solid rgba(201,168,76,.3);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:3px;color:var(--gold);flex-shrink:0;cursor:pointer}
+.np-st{font-size:8px;font-weight:700;letter-spacing:2.5px;color:var(--red-br);text-transform:uppercase;display:flex;align-items:center;gap:7px;margin-bottom:7px}
+.np-ti{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:2px;color:var(--offwhite);line-height:1;margin-bottom:4px}
+.np-ar{font-size:12.5px;font-weight:500;color:var(--gold);margin-bottom:4px}
+.np-me{font-size:10px;color:var(--grey);font-family:'Space Mono',monospace}
+.np-r{display:flex;flex-direction:column;align-items:flex-end;gap:10px}
+.np-wave{display:flex;align-items:flex-end;gap:2px;height:34px}
+.np-wave .wb{width:3px;background:var(--gold);border-radius:1px;animation:wb var(--d,.7s) ease-in-out infinite alternate;animation-delay:var(--dl,0s)}
+@keyframes wb{from{transform:scaleY(.12);opacity:.25}to{transform:scaleY(1);opacity:1}}
+.np-fr{font-family:'Space Mono',monospace;font-size:10.5px;color:var(--grey)}
+
+/* ════════════════════════ TRACK LIST ════════════════════════ */
+.track-list{margin-top:36px;display:flex;flex-direction:column;gap:1px}
+.track-row{
+  display:grid;grid-template-columns:40px 52px 1fr auto auto;gap:0;align-items:center;
+  background:#090909;border:1px solid var(--border2);
+  transition:background .2s,border-color .2s;cursor:pointer;
+}
+.track-row:hover{background:#0E0E0E;border-color:var(--border)}
+.track-row.playing-row{background:rgba(201,168,76,0.04);border-color:rgba(201,168,76,0.3)}
+.tr-num{padding:0 0 0 16px;font-family:'Space Mono',monospace;font-size:11px;color:var(--grey);text-align:center}
+.tr-art{width:52px;height:52px;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:10px;color:var(--gold);flex-shrink:0}
+.tr-info{padding:14px 16px;min-width:0}
+.tr-name{font-size:13px;font-weight:600;color:var(--offwhite);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:2px}
+.tr-meta{font-size:10.5px;color:var(--grey)}
+.tr-tag{padding:0 12px;white-space:nowrap}
+.tr-tag span{font-size:7.5px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:3px 8px;border-radius:0}
+.tag-exc{background:rgba(139,26,26,0.25);color:var(--red-br);border:1px solid rgba(184,32,32,0.3)}
+.tag-new{background:rgba(201,168,76,0.15);color:var(--gold);border:1px solid rgba(201,168,76,0.3)}
+.tag-bap{background:rgba(255,255,255,0.06);color:var(--grey);border:1px solid rgba(255,255,255,0.1)}
+.tr-dur{padding:0 16px;font-family:'Space Mono',monospace;font-size:10.5px;color:var(--grey);text-align:right}
+.play-icon{font-size:16px;display:none}
+.track-row:hover .play-icon,.track-row.playing-row .play-icon{display:inline}
+.track-row:hover .tr-num,.track-row.playing-row .tr-num{display:none}
+.playing-row .tr-name{color:var(--gold)}
+
+.filter-bar{display:flex;gap:8px;margin-top:32px;flex-wrap:wrap}
+.f-btn{background:transparent;border:1px solid var(--border);color:var(--grey);padding:7px 18px;font-size:9px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;transition:all .2s}
+.f-btn:hover,.f-btn.active{background:var(--gold);color:var(--black);border-color:var(--gold)}
+
+/* ════════════════════════ SCHEDULE / CONTROL ════════════════════════ */
+.sched-wrapper{margin-top:40px;display:grid;grid-template-columns:1fr 340px;gap:24px;align-items:start}
+.sched-board{border:1px solid var(--border)}
+.sched-head{display:grid;grid-template-columns:100px 1fr 90px 80px;background:#0A0A0A;border-bottom:1px solid var(--border);padding:10px 16px;font-size:8px;font-weight:700;letter-spacing:2px;color:var(--grey);text-transform:uppercase;gap:12px}
+.sched-row{
+  display:grid;grid-template-columns:100px 1fr 90px 80px;
+  gap:12px;align-items:center;
+  padding:14px 16px;border-bottom:1px solid var(--border2);
+  transition:background .2s;
+}
+.sched-row:hover{background:#0C0C0C}
+.sched-row.now{background:rgba(139,26,26,0.07);border-left:3px solid var(--red-br)}
+.sched-row.gold{border-left:3px solid var(--gold)}
+.sched-time{font-family:'Space Mono',monospace;font-size:10.5px;color:var(--gold);letter-spacing:.5px}
+.sched-show{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:1.5px;color:var(--offwhite);line-height:1.1}
+.sched-host{font-size:10.5px;color:var(--grey)}
+.sched-genre{font-size:9px;font-weight:600;letter-spacing:1.5px;color:var(--grey);text-transform:uppercase}
+.sched-status{font-size:7.5px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;padding:3px 8px}
+.st-live{background:var(--red);color:#fff}
+.st-next{background:rgba(201,168,76,0.15);color:var(--gold);border:1px solid rgba(201,168,76,0.3)}
+.st-sched{color:var(--grey)}
+
+/* ── Program Control Panel ── */
+.ctrl-panel{background:#090909;border:1px solid var(--border);border-top:2px solid var(--gold);padding:24px}
+.ctrl-title{font-size:8px;font-weight:700;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:18px;display:flex;align-items:center;gap:10px}
+.ctrl-title::before{content:'';width:14px;height:1px;background:var(--gold)}
+.ctrl-group{margin-bottom:20px}
+.ctrl-label{font-size:8px;font-weight:700;letter-spacing:2px;color:var(--grey);text-transform:uppercase;margin-bottom:8px;display:block}
+.ctrl-select{
+  width:100%;background:#111;border:1px solid var(--border);
+  color:var(--offwhite);padding:9px 12px;font-size:12px;
+  font-family:'Inter',sans-serif;outline:none;cursor:pointer;
+  appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23C9A84C' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 12px center;
+}
+.ctrl-select option{background:#111}
+.ctrl-btn{
+  width:100%;background:var(--gold);color:var(--black);
+  border:none;padding:11px;font-size:9px;font-weight:800;
+  letter-spacing:2px;text-transform:uppercase;cursor:pointer;
+  transition:background .2s;margin-top:4px;
+}
+.ctrl-btn:hover{background:var(--gold-lt)}
+.ctrl-btn.red{background:var(--red);color:#fff;margin-top:8px}
+.ctrl-btn.red:hover{background:var(--red-br)}
+.ctrl-divider{height:1px;background:var(--border);margin:20px 0}
+.ctrl-stat{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.cs-key{font-size:10px;color:var(--grey)}
+.cs-val{font-family:'Space Mono',monospace;font-size:11px;color:var(--offwhite)}
+.cs-val.live{color:var(--red-br)}
+.cs-val.gold{color:var(--gold)}
+.volume-ctrl{display:flex;align-items:center;gap:10px}
+.volume-ctrl input{flex:1}
+.vol-num{font-family:'Space Mono',monospace;font-size:10px;color:var(--gold);min-width:32px;text-align:right}
+
+/* ════════════════════════ PROGRAMS ════════════════════════ */
+.prog-grid{margin-top:40px;display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1px;background:var(--border);border:1px solid var(--border)}
+.prog-card{background:var(--black);padding:32px 26px;position:relative;overflow:hidden;transition:background .25s;cursor:default}
+.prog-card:hover{background:#0D0D0D}
+.prog-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--gold),var(--red));transform:scaleX(0);transform-origin:left;transition:transform .3s}
+.prog-card:hover::after{transform:scaleX(1)}
+.prog-num{position:absolute;top:24px;right:22px;font-family:'Bebas Neue',sans-serif;font-size:44px;color:rgba(201,168,76,0.05);line-height:1}
+.prog-time{font-family:'Space Mono',monospace;font-size:9.5px;color:var(--gold);letter-spacing:1px;margin-bottom:12px}
+.prog-icon{width:40px;height:40px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+.prog-icon svg{width:18px;height:18px}
+.prog-name{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px;color:var(--offwhite);margin-bottom:8px;line-height:1.1}
+.prog-desc{font-size:12px;color:var(--grey);line-height:1.75}
+.prog-tag{display:inline-block;margin-top:14px;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.18);color:var(--gold);font-size:7.5px;font-weight:700;letter-spacing:2px;padding:3px 10px;text-transform:uppercase}
+
+/* ════════════════════════ SUBMIT FORM ════════════════════════ */
+.submit-wrapper{margin-top:40px;display:grid;grid-template-columns:1.3fr 1fr;gap:40px;align-items:start}
+.submit-form{background:#090909;border:1px solid var(--border);border-top:3px solid var(--gold);padding:36px}
+.form-title{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;color:var(--offwhite);margin-bottom:6px}
+.form-sub{font-size:12px;color:var(--grey);margin-bottom:28px;line-height:1.6}
+.form-group{margin-bottom:18px}
+.form-label{font-size:8px;font-weight:700;letter-spacing:2.5px;color:var(--grey);text-transform:uppercase;display:block;margin-bottom:7px}
+.form-input,.form-select,.form-textarea{
+  width:100%;background:#0D0D0D;border:1px solid var(--border);
+  color:var(--offwhite);padding:11px 14px;font-size:13px;
+  font-family:'Inter',sans-serif;outline:none;
+  transition:border-color .2s;
+}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--gold)}
+.form-input::placeholder,.form-textarea::placeholder{color:rgba(136,136,136,0.5)}
+.form-select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23C9A84C' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;background-color:#0D0D0D;cursor:pointer}
+.form-select option{background:#0D0D0D}
+.form-textarea{resize:vertical;min-height:90px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.upload-zone{
+  border:1.5px dashed rgba(201,168,76,0.3);
+  background:rgba(201,168,76,0.02);
+  padding:28px;text-align:center;cursor:pointer;
+  transition:border-color .2s,background .2s;margin-bottom:18px;
+}
+.upload-zone:hover{border-color:var(--gold);background:rgba(201,168,76,0.05)}
+.upload-icon{font-size:28px;margin-bottom:8px;display:block}
+.upload-text{font-size:12px;color:var(--grey);line-height:1.5}
+.upload-text strong{color:var(--gold)}
+input[type=file]{display:none}
+.form-check{display:flex;align-items:flex-start;gap:10px;margin-bottom:14px}
+.form-check input[type=checkbox]{margin-top:2px;accent-color:var(--gold);width:15px;height:15px;flex-shrink:0;cursor:pointer}
+.form-check label{font-size:11.5px;color:var(--grey);line-height:1.5;cursor:pointer}
+.form-check label a{color:var(--gold)}
+.btn-submit{width:100%;background:var(--gold);color:var(--black);border:none;padding:14px;font-size:10px;font-weight:800;letter-spacing:2.5px;text-transform:uppercase;cursor:pointer;transition:background .2s,transform .15s}
+.btn-submit:hover{background:var(--gold-lt);transform:translateY(-1px)}
+.submit-success{display:none;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.3);padding:24px;text-align:center;margin-top:16px}
+.submit-success .ss-icon{font-size:32px;margin-bottom:10px;display:block}
+.submit-success p{font-size:13px;color:var(--offwhite);line-height:1.6}
+.submit-success strong{color:var(--gold)}
+
+/* Submit sidebar */
+.submit-side{display:flex;flex-direction:column;gap:20px}
+.side-info-box{background:#090909;border:1px solid var(--border);padding:24px}
+.sib-title{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;color:var(--offwhite);margin-bottom:14px}
+.sib-list{list-style:none;display:flex;flex-direction:column;gap:10px}
+.sib-list li{display:flex;align-items:flex-start;gap:10px;font-size:12px;color:var(--grey);line-height:1.5}
+.sib-list li::before{content:'◆';color:var(--gold);font-size:8px;margin-top:4px;flex-shrink:0}
+.side-mission{background:var(--red);padding:24px;position:relative;overflow:hidden}
+.side-mission::before{content:'"';position:absolute;top:-10px;right:10px;font-family:'Bebas Neue',sans-serif;font-size:100px;color:rgba(255,255,255,0.05);line-height:1}
+.sm-text{font-size:13px;line-height:1.8;color:rgba(255,255,255,0.82);font-style:italic;position:relative;z-index:1}
+.sm-text strong{color:var(--gold-lt);font-style:normal}
+
+/* ════════════════════════ MODAL (Stream Setup) ════════════════════════ */
+.modal-overlay{
+  position:fixed;inset:0;z-index:1000;
+  background:rgba(0,0,0,0.85);
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;pointer-events:none;transition:opacity .3s;
+  padding:20px;
+}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal{
+  background:#0E0E0E;border:1px solid var(--border);border-top:3px solid var(--gold);
+  max-width:560px;width:100%;padding:40px;position:relative;
+  max-height:90vh;overflow-y:auto;
+}
+.modal-close{position:absolute;top:16px;right:16px;background:transparent;border:none;color:var(--grey);font-size:20px;cursor:pointer;transition:color .2s}
+.modal-close:hover{color:var(--offwhite)}
+.modal h3{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:3px;color:var(--offwhite);margin-bottom:6px}
+.modal .sub{font-size:12px;color:var(--grey);margin-bottom:28px;line-height:1.6}
+.stream-step{display:flex;gap:16px;margin-bottom:20px;padding-bottom:20px;border-bottom:1px solid var(--border2)}
+.stream-step:last-child{border:none;margin-bottom:0;padding-bottom:0}
+.step-num{width:28px;height:28px;border-radius:50%;background:var(--gold);color:var(--black);font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.step-body h4{font-size:13px;font-weight:700;color:var(--offwhite);margin-bottom:4px}
+.step-body p{font-size:12px;color:var(--grey);line-height:1.6}
+.step-body a{color:var(--gold)}
+.step-body code{background:#1A1A1A;border:1px solid var(--border);padding:2px 8px;font-family:'Space Mono',monospace;font-size:11px;color:var(--gold-lt);border-radius:2px}
+
+/* ════════════════════════ FOOTER ════════════════════════ */
+footer{background:#040404;border-top:1px solid var(--border);padding:56px 48px 32px}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;margin-bottom:48px}
+.fb-logo{font-family:'Bebas Neue',sans-serif;font-size:48px;letter-spacing:6px;line-height:1;margin-bottom:5px}
+.fb-logo .r{color:var(--red-br)}.fb-logo .g{color:var(--gold)}
+.fb-tag{font-size:9px;letter-spacing:2.5px;color:var(--gold-dk);text-transform:uppercase;font-style:italic;margin-bottom:14px}
+.fb-p{font-size:11.5px;color:var(--grey);line-height:1.75;max-width:270px}
+.fc h4{font-size:8px;font-weight:700;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:16px}
+.fc ul{list-style:none;display:flex;flex-direction:column;gap:10px}
+.fc ul li a{font-size:11.5px;color:var(--grey);text-decoration:none;transition:color .2s}
+.fc ul li a:hover{color:var(--offwhite)}
+.footer-btm{border-top:1px solid var(--border);padding-top:24px;display:flex;align-items:center;justify-content:space-between}
+.footer-btm p{font-size:10.5px;color:var(--grey)}
+.footer-freq{font-family:'Space Mono',monospace;font-size:10.5px;color:var(--gold);letter-spacing:.5px}
+
+/* ════════════════════════ TOAST ════════════════════════ */
+#toast{
+  position:fixed;bottom:108px;left:50%;transform:translateX(-50%) translateY(20px);z-index:600;
+  background:#111;border:1px solid var(--border);border-left:3px solid var(--gold);
+  padding:12px 20px;font-size:12px;color:var(--offwhite);
+  opacity:0;transition:all .35s;pointer-events:none;white-space:nowrap;
+}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+@media(max-width:1024px){
+  .sched-wrapper,.submit-wrapper{grid-template-columns:1fr}
+  .footer-grid{grid-template-columns:1fr 1fr;gap:32px}
+  .h-vinyl{right:-180px;opacity:.25}
+}
+@media(max-width:700px){
+  nav{padding:0 18px}
+  .nav-links{display:none}
+  .hero,.page-section,footer{padding-left:18px;padding-right:18px}
+  .np-card{grid-template-columns:1fr;gap:14px}
+  .np-r{align-items:flex-start}
+  .form-row{grid-template-columns:1fr}
+  .pb-up-next{display:none}
+  .pb-vol{display:none}
+  .footer-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- ════ PLAYER BAR ════ -->
+<div id="playerBar">
+  <div class="pb-art" onclick="togglePlay()" title="Click to play/pause">
+    <div class="pb-live-ring"></div>
+    <div id="pbArtLabel">RGR</div>
+  </div>
+  <div class="pb-info">
+    <div class="pb-show-badge" id="pbShow">Morning Beat Session</div>
+    <div class="pb-track" id="pbTrack">Genuine Frequencies Vol. 7</div>
+    <div class="pb-artist" id="pbArtist">Prod Difao · RGR Exclusive</div>
+  </div>
+  <div class="pb-controls">
+    <button class="pb-btn" onclick="prevTrack()" title="Previous">&#9664;&#9664;</button>
+    <button class="pb-btn main-play" id="mainPlayBtn" onclick="togglePlay()">&#9654;</button>
+    <button class="pb-btn" onclick="nextTrack()" title="Next">&#9654;&#9654;</button>
+    <button class="pb-btn" id="shuffleBtn" onclick="toggleShuffle()" title="Shuffle">&#8635;</button>
+    <button class="pb-btn" id="loopBtn" onclick="toggleLoop()" title="Loop">&#9854;</button>
+  </div>
+  <div class="pb-timeline">
+    <div class="pb-times">
+      <span class="pb-t" id="pbCur">0:00</span>
+      <span class="pb-t" id="pbDur">—</span>
+    </div>
+    <div class="pb-bar" id="pbBar" onclick="seekTo(event)">
+      <div class="pb-fill" id="pbFill"></div>
+      <div class="pb-thumb" id="pbThumb"></div>
+    </div>
+  </div>
+  <div class="pb-vol">
+    <span class="pb-vol-icon" onclick="toggleMute()">🔊</span>
+    <input type="range" class="vol-slider" id="volSlider" min="0" max="100" value="80" oninput="setVolume(this.value)">
+  </div>
+  <div class="pb-up-next">
+    <div class="pb-un-lbl">Up Next</div>
+    <div class="pb-un-track" id="pbNextTrack">Loading...</div>
+  </div>
+</div>
+
+<!-- ════ NAV ════ -->
+<nav>
+  <a class="nav-logo" href="#top">
+    <div class="nav-badge"><span>RGR</span></div>
+    <div class="nav-wm">
+      <span class="t">REACTION GENUINE RADIO</span>
+      <span class="b">Real Music. Genuine Vibes. 24/7.</span>
+    </div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#listen" onclick="setActive(this)">Listen</a></li>
+    <li><a href="#schedule" onclick="setActive(this)">Schedule</a></li>
+    <li><a href="#programs" onclick="setActive(this)">Programs</a></li>
+    <li><a href="#submit" onclick="setActive(this)">Submit Music</a></li>
+    <li><a href="#about" onclick="setActive(this)">About</a></li>
+  </ul>
+  <div class="nav-right">
+    <div class="air-pill"><div class="airdot"></div><span class="air-lbl">On Air</span></div>
+    <button class="btn-nav" onclick="document.getElementById('streamModal').classList.add('open')">Go Live Guide</button>
+  </div>
+</nav>
+
+<!-- ════ TICKER ════ -->
+<div class="ticker">
+  <div class="ticker-tag">🔴 LIVE</div>
+  <div class="ticker-roll">
+    <span>NOW PLAYING: Genuine Frequencies Vol. 7 — Prod Difao <span class="d">◆</span></span>
+    <span>EXCLUSIVE: Unreleased Boom Bap Session dropping this Friday <span class="d">◆</span></span>
+    <span>SUBMIT YOUR MUSIC: reactiongenuineradio.com/submit <span class="d">◆</span></span>
+    <span>PRODUCER'S CORNER — Tonight 8PM: Beat Breakdown with Prod Difao <span class="d">◆</span></span>
+    <span>CLASSIC BOOM BAP HOUR — Fridays 6PM EST <span class="d">◆</span></span>
+    <span>RGR SHOWCASE — Independent artists, submit now and get aired <span class="d">◆</span></span>
+    <span>NOW PLAYING: Genuine Frequencies Vol. 7 — Prod Difao <span class="d">◆</span></span>
+    <span>EXCLUSIVE: Unreleased Boom Bap Session dropping this Friday <span class="d">◆</span></span>
+    <span>SUBMIT YOUR MUSIC: reactiongenuineradio.com/submit <span class="d">◆</span></span>
+    <span>PRODUCER'S CORNER — Tonight 8PM: Beat Breakdown with Prod Difao <span class="d">◆</span></span>
+    <span>CLASSIC BOOM BAP HOUR — Fridays 6PM EST <span class="d">◆</span></span>
+    <span>RGR SHOWCASE — Independent artists, submit now and get aired <span class="d">◆</span></span>
+  </div>
+</div>
+
+<!-- ════ HERO ════ -->
+<section class="hero" id="top">
+  <div class="h-bg"></div>
+  <div class="h-grid"></div>
+  <div class="h-vinyl">
+    <div class="vdisc">
+      <div class="vlabel"><span class="vr">RGR</span><span class="vs">Genuine Vibes</span></div>
+      <div class="vhole"></div>
+    </div>
+  </div>
+  <div class="h-content">
+    <div class="h-ey">Broadcasting Live · 24/7 · Worldwide</div>
+    <div class="h-logo-wrap">
+      <svg class="h-svg" viewBox="0 0 310 165" fill="none">
+        <ellipse cx="155" cy="82" rx="150" ry="72" fill="rgba(139,26,26,0.06)"/>
+        <g><rect x="7" y="16" width="13" height="132" fill="#C9A84C"/><rect x="7" y="16" width="57" height="13" rx="2" fill="#C9A84C"/><rect x="7" y="74" width="53" height="13" fill="#C9A84C"/><rect x="51" y="16" width="13" height="71" rx="2" fill="#C9A84C"/><polygon points="20,87 64,148 51,148 7,87" fill="#C9A84C"/></g>
+        <g transform="translate(108,0)">
+          <rect x="26" y="20" width="40" height="66" rx="20" fill="#F0EDE8" stroke="#C9A84C" stroke-width="2"/>
+          <line x1="26" y1="44" x2="66" y2="44" stroke="rgba(139,26,26,0.3)" stroke-width="1.5"/>
+          <line x1="26" y1="56" x2="66" y2="56" stroke="rgba(139,26,26,0.3)" stroke-width="1.5"/>
+          <line x1="26" y1="68" x2="66" y2="68" stroke="rgba(139,26,26,0.3)" stroke-width="1.5"/>
+          <rect x="43" y="86" width="7" height="40" fill="#777"/>
+          <path d="M28 126 Q46 138 64 126" stroke="#777" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+          <circle cx="46" cy="53" r="26" stroke="rgba(201,168,76,0.35)" stroke-width="1" fill="none" stroke-dasharray="3,3"/>
+        </g>
+        <g transform="translate(218,0)"><rect x="7" y="16" width="13" height="132" fill="#B82020"/><rect x="7" y="16" width="57" height="13" rx="2" fill="#B82020"/><rect x="7" y="74" width="53" height="13" fill="#B82020"/><rect x="51" y="16" width="13" height="71" rx="2" fill="#B82020"/><polygon points="20,87 64,148 51,148 7,87" fill="#B82020"/></g>
+        <path d="M96 40 Q87 53 87 82 Q87 111 96 124" stroke="rgba(201,168,76,0.42)" stroke-width="2" fill="none" stroke-linecap="round"/>
+        <path d="M82 28 Q70 51 70 82 Q70 113 82 136" stroke="rgba(201,168,76,0.18)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+        <path d="M214 40 Q223 53 223 82 Q223 111 214 124" stroke="rgba(201,168,76,0.42)" stroke-width="2" fill="none" stroke-linecap="round"/>
+        <path d="M228 28 Q240 51 240 82 Q240 113 228 136" stroke="rgba(201,168,76,0.18)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      </svg>
+      <span class="h-full">REACTION GENUINE RADIO</span>
+    </div>
+    <div class="h-tag">Real <span class="g">Music.</span> Genuine <span class="g">Vibes.</span><br><span class="r">24/7.</span></div>
+    <p class="h-desc">The home of authentic music, exclusive beats, and original productions by <strong>Prod Difao</strong> and independent artists. Broadcasting unreleased tracks, Boom Bap, and original hip-hop — <strong>where real music lives.</strong></p>
+    <div class="h-btns">
+      <button class="btn-p" onclick="togglePlay()">▶ Listen Live Now</button>
+      <a class="btn-o" href="#submit">Submit Your Music</a>
+      <a class="btn-o" href="#schedule">View Schedule</a>
+    </div>
+  </div>
+  <canvas id="hEq"></canvas>
+</section>
+
+<!-- ════ LISTEN / TRACK LIST ════ -->
+<section class="page-section s-alt" id="listen">
+  <div class="eyebrow">Music Library</div>
+  <h2 class="sec-h">PROD DIFAO — <span class="g">RGR CATALOG</span></h2>
+  <p class="sec-intro">Beats, original productions, and unreleased songs. Click any track to play. All music produced and owned by Prod Difao / Reaction Genuine Radio.</p>
+
+  <div class="filter-bar">
+    <button class="f-btn active" onclick="filterTracks('all',this)">All Tracks</button>
+    <button class="f-btn" onclick="filterTracks('beat',this)">Beats</button>
+    <button class="f-btn" onclick="filterTracks('exclusive',this)">Exclusives</button>
+    <button class="f-btn" onclick="filterTracks('boombap',this)">Boom Bap</button>
+    <button class="f-btn" onclick="filterTracks('unreleased',this)">Unreleased</button>
+  </div>
+
+  <div class="track-list" id="trackList"></div>
+</section>
+
+<!-- ════ SCHEDULE + CONTROL PANEL ════ -->
+<section class="page-section" id="schedule">
+  <div class="eyebrow">Live Schedule & Control</div>
+  <h2 class="sec-h">TODAY'S <span class="g">PROGRAMMING</span></h2>
+  <p class="sec-intro">Live schedule board and your program control panel. Switch shows, control volume, and manage what's broadcasting — all from here.</p>
+
+  <div class="sched-wrapper">
+    <!-- Schedule board -->
+    <div>
+      <div class="sched-board">
+        <div class="sched-head">
+          <span>TIME</span><span>SHOW</span><span>GENRE</span><span>STATUS</span>
+        </div>
+        <div id="schedRows"></div>
+      </div>
+    </div>
+
+    <!-- Control Panel -->
+    <div class="ctrl-panel">
+      <div class="ctrl-title">Program Control Panel</div>
+
+      <div class="ctrl-group">
+        <span class="ctrl-label">Now Broadcasting</span>
+        <div class="ctrl-stat"><span class="cs-key">Status</span><span class="cs-val live" id="cpStatus">● LIVE</span></div>
+        <div class="ctrl-stat"><span class="cs-key">Current Show</span><span class="cs-val gold" id="cpShow">Morning Beat Session</span></div>
+        <div class="ctrl-stat"><span class="cs-key">Host</span><span class="cs-val" id="cpHost">Prod Difao</span></div>
+        <div class="ctrl-stat"><span class="cs-key">Listeners</span><span class="cs-val" id="cpListeners">—</span></div>
+      </div>
+
+      <div class="ctrl-divider"></div>
+
+      <div class="ctrl-group">
+        <span class="ctrl-label">Switch Program</span>
+        <select class="ctrl-select" id="showSelect">
+          <option>Morning Beat Session</option>
+          <option>Producer's Corner</option>
+          <option>Exclusive First Listen</option>
+          <option>RGR Genuine Showcase</option>
+          <option>Studio Diaries</option>
+          <option>Classic Boom Bap Hour</option>
+          <option>Late Night Vibes</option>
+        </select>
+        <button class="ctrl-btn" onclick="switchShow()">▶ Switch to Selected Show</button>
+        <button class="ctrl-btn red" onclick="goLive()">🔴 Go Live (Manual Override)</button>
+      </div>
+
+      <div class="ctrl-divider"></div>
+
+      <div class="ctrl-group">
+        <span class="ctrl-label">Master Volume</span>
+        <div class="volume-ctrl">
+          <span style="font-size:14px">🔊</span>
+          <input type="range" class="vol-slider" id="masterVol" min="0" max="100" value="80" oninput="setMasterVol(this.value)" style="flex:1">
+          <span class="vol-num" id="masterVolNum">80%</span>
+        </div>
+      </div>
+
+      <div class="ctrl-divider"></div>
+
+      <div class="ctrl-group">
+        <span class="ctrl-label">Queue Next Track</span>
+        <select class="ctrl-select" id="queueSelect"></select>
+        <button class="ctrl-btn" onclick="queueTrack()">+ Add to Queue</button>
+      </div>
+
+      <div class="ctrl-divider"></div>
+      <div class="ctrl-stat"><span class="cs-key">Stream Platform</span><span class="cs-val">Zeno.fm / Radio.co</span></div>
+      <div class="ctrl-stat"><span class="cs-key">Broadcast Quality</span><span class="cs-val gold">320kbps AAC</span></div>
+      <div class="ctrl-stat"><span class="cs-key">Frequency</span><span class="cs-val">98.7 FM / HD Stream</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ════ PROGRAMS ════ -->
+<section class="page-section s-alt" id="programs">
+  <div class="eyebrow">Programming</div>
+  <h2 class="sec-h">7 SHOWS. <span class="g">ONE SOUND.</span> <span class="r">GENUINE.</span></h2>
+
+  <div class="prog-grid">
+    <div class="prog-card"><div class="prog-num">01</div><div class="prog-time">06:00 AM</div><div class="prog-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#C9A84C" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg></div><div class="prog-name">Morning Beat Session</div><div class="prog-desc">Start the day with wall-to-wall instrumentals — boom bap, lo-fi, jazz-influenced hip-hop beats by Prod Difao and guests.</div><span class="prog-tag">Instrumentals · Hip-Hop Beats</span></div>
+    <div class="prog-card"><div class="prog-num">02</div><div class="prog-time">10:00 AM</div><div class="prog-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#C9A84C" stroke-width="1.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div><div class="prog-name">Producer's Corner</div><div class="prog-desc">Beat breakdowns, sample chop walkthroughs, and drum programming tips. Prod Difao opens up the process live on air.</div><span class="prog-tag">Production Tips · Beat Breakdowns</span></div>
+    <div class="prog-card"><div class="prog-num">03</div><div class="prog-time">12:00 PM</div><div class="prog-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#C9A84C" stroke-width="1.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div><div class="prog-name">Exclusive First Listen</div><div class="prog-desc">Unreleased songs and album previews — heard on RGR before any streaming platform. Prod Difao drops exclusively here first.</div><span class="prog-tag">Unreleased · World Premieres</span></div>
+    <div class="prog-card"><div class="prog-num">04</div><div class="prog-time">02:00 PM</div><div class="prog-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#C9A84C" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><div class="prog-name">RGR Genuine Showcase</div><div class="prog-desc">Music from independent artists who submitted to RGR. If you made it real, we play it real. The heartbeat of the station.</div><span class="prog-tag">Independent Artists · Submissions</span></div>
+    <div class="prog-card"><div class="prog-num">05</div><div class="prog-time">04:00 PM</div><div class="prog-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#C9A84C" stroke-width="1.5"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg></div><div class="prog-name">Studio Diaries</div><div class="prog-desc">Behind-the-scenes from the recording booth. In-session recordings, engineer talk, and real conversations about the craft.</div><span class="prog-tag">Behind the Scenes · Recording</span></div>
+    <div class="prog-card"><div class="prog-num">06</div><div class="prog-time">06:00 PM</div><div class="prog-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#C9A84C" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg></div><div class="prog-name">Classic Boom Bap Hour</div><div class="prog-desc">Paying homage to the records that built the foundation. Two hours for the golden era, the underground legends, and the crate.</div><span class="prog-tag">Classic Hip-Hop · Legacy</span></div>
+    <div class="prog-card"><div class="prog-num">07</div><div class="prog-time">10:00 PM</div><div class="prog-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#C9A84C" stroke-width="1.5"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></div><div class="prog-name">Late Night Vibes</div><div class="prog-desc">Relaxed beats, soulful productions, and smooth hip-hop for when the lights go low. The city never sleeps and neither does RGR.</div><span class="prog-tag">Lo-Fi · Soul · Late Night</span></div>
+  </div>
+</section>
+
+<!-- ════ SUBMIT MUSIC ════ -->
+<section class="page-section" id="submit">
+  <div class="eyebrow">Artist Submissions</div>
+  <h2 class="sec-h">SUBMIT YOUR <span class="g">MUSIC</span> TO RGR</h2>
+  <p class="sec-intro">Independent artists, producers, and vocalists — send your work to Reaction Genuine Radio. We listen to everything submitted. Real music gets aired.</p>
+
+  <div class="submit-wrapper">
+    <div class="submit-form">
+      <div class="form-title">Music Submission Form</div>
+      <div class="form-sub">Fill in your details below. We accept MP3, WAV, FLAC and AIFF files up to 50MB. All genres considered — if it's genuine, it belongs on RGR.</div>
+
+      <div id="submissionForm">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Artist / Producer Name *</label>
+            <input class="form-input" type="text" id="f-artist" placeholder="Your name or alias">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Track Title *</label>
+            <input class="form-input" type="text" id="f-track" placeholder="Name of your song or beat">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Email Address *</label>
+            <input class="form-input" type="email" id="f-email" placeholder="your@email.com">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Genre / Style *</label>
+            <select class="form-select" id="f-genre">
+              <option value="">Select genre...</option>
+              <option>Hip-Hop (Boom Bap)</option>
+              <option>Hip-Hop (Trap)</option>
+              <option>Hip-Hop (Conscious)</option>
+              <option>Instrumental Beat</option>
+              <option>Dancehall</option>
+              <option>Afrobeats</option>
+              <option>R&amp;B / Neo-Soul</option>
+              <option>Lo-Fi / Chill</option>
+              <option>Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Suggested Program Slot</label>
+          <select class="form-select" id="f-show">
+            <option value="">Let RGR decide (recommended)</option>
+            <option>Morning Beat Session</option>
+            <option>Producer's Corner</option>
+            <option>Exclusive First Listen</option>
+            <option>RGR Genuine Showcase</option>
+            <option>Classic Boom Bap Hour</option>
+            <option>Late Night Vibes</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">SoundCloud / Link (or upload below)</label>
+          <input class="form-input" type="url" id="f-link" placeholder="https://soundcloud.com/yourtrack">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Upload Music File (MP3, WAV, FLAC up to 50MB)</label>
+          <div class="upload-zone" onclick="document.getElementById('fileInput').click()">
+            <span class="upload-icon">🎵</span>
+            <div class="upload-text" id="uploadText"><strong>Click to upload your track</strong><br>MP3, WAV, FLAC, AIFF accepted · Max 50MB</div>
+          </div>
+          <input type="file" id="fileInput" accept=".mp3,.wav,.flac,.aiff,.aif" onchange="handleFileSelect(this)">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Tell Us About Your Music</label>
+          <textarea class="form-textarea" id="f-bio" placeholder="Brief description — what's the vibe, what inspired it, any notable features..."></textarea>
+        </div>
+        <div class="form-check">
+          <input type="checkbox" id="chk-original">
+          <label for="chk-original">I confirm this is my original music and I own the rights to submit it to Reaction Genuine Radio for broadcast.</label>
+        </div>
+        <div class="form-check">
+          <input type="checkbox" id="chk-terms">
+          <label for="chk-terms">I agree to RGR's <a href="#">Submission Terms</a> and understand that submission does not guarantee broadcast.</label>
+        </div>
+        <button class="btn-submit" onclick="submitForm()">🎙 Submit to Reaction Genuine Radio</button>
+      </div>
+
+      <div class="submit-success" id="submitSuccess">
+        <span class="ss-icon">✅</span>
+        <p>Your music has been submitted to <strong>Reaction Genuine Radio</strong>!<br><br>
+        Prod Difao and the RGR team will review your track within <strong>5–7 business days</strong>. If selected, you'll be notified by email before your air date.<br><br>
+        <strong>Real music gets heard. Thank you for keeping it genuine.</strong></p>
+      </div>
+    </div>
+
+    <div class="submit-side">
+      <div class="side-info-box">
+        <div class="sib-title">What We're Looking For</div>
+        <ul class="sib-list">
+          <li>Original productions — no unlicensed samples</li>
+          <li>Boom Bap, hip-hop, instrumentals, lo-fi, and authentic beats</li>
+          <li>Unreleased tracks get priority for the Exclusive First Listen slot</li>
+          <li>Independent artists with no major label restrictions</li>
+          <li>Professional-quality audio (minimum 320kbps MP3 or WAV)</li>
+          <li>Music with a genuine story, message, or artistic intent</li>
+          <li>Dancehall, Afrobeats, and Caribbean music also welcome</li>
+        </ul>
+      </div>
+      <div class="side-info-box">
+        <div class="sib-title">After You Submit</div>
+        <ul class="sib-list">
+          <li>RGR team reviews all submissions within 5–7 days</li>
+          <li>Selected tracks are placed into a program slot</li>
+          <li>You'll receive your air date and time by email</li>
+          <li>Your name and track appear on the RGR live ticker</li>
+          <li>Top artists may be invited to the RGR Showcase or Studio Diaries</li>
+        </ul>
+      </div>
+      <div class="side-mission">
+        <div class="sm-text"><strong>Reaction Genuine Radio</strong> exists to provide a platform for authentic music, creative producers, independent artists, and exclusive productions — while building a community around <strong>genuine artistic expression.</strong></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════ ABOUT ════ -->
+<section class="page-section s-alt" id="about">
+  <div class="eyebrow">About RGR</div>
+  <h2 class="sec-h">BUILT BY <span class="g">PROD DIFAO</span><br>FOR REAL <span class="r">MUSIC</span></h2>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:36px;max-width:900px">
+    <div>
+      <p style="font-size:14px;color:var(--grey);line-height:1.9;margin-bottom:16px">Reaction Genuine Radio was built from the ground up by <strong style="color:var(--offwhite)">Prod Difao</strong> — a music producer dedicated to authentic sound, original beats, and giving independent artists a real platform to be heard.</p>
+      <p style="font-size:14px;color:var(--grey);line-height:1.9">RGR broadcasts 24/7 — curated Boom Bap sessions, exclusive first listens on unreleased productions, behind-the-scenes studio content, and a genuine showcase for independent voices that mainstream radio ignores.</p>
+    </div>
+    <div>
+      <div style="background:#090909;border:1px solid var(--border);border-left:3px solid var(--gold);padding:24px">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;color:var(--offwhite);margin-bottom:16px">QUICK FACTS</div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="display:flex;justify-content:space-between;font-size:12px;padding-bottom:10px;border-bottom:1px solid var(--border2)"><span style="color:var(--grey)">Founded By</span><span style="color:var(--offwhite);font-weight:600">Prod Difao</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:12px;padding-bottom:10px;border-bottom:1px solid var(--border2)"><span style="color:var(--grey)">Format</span><span style="color:var(--offwhite);font-weight:600">Internet Radio · 24/7</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:12px;padding-bottom:10px;border-bottom:1px solid var(--border2)"><span style="color:var(--grey)">Genres</span><span style="color:var(--offwhite);font-weight:600">Boom Bap · Hip-Hop · Dancehall</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:12px;padding-bottom:10px;border-bottom:1px solid var(--border2)"><span style="color:var(--grey)">Frequency</span><span style="color:var(--gold);font-weight:600;font-family:'Space Mono',monospace">98.7 FM / Stream HD</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:12px"><span style="color:var(--grey)">Audio Quality</span><span style="color:var(--gold);font-weight:600;font-family:'Space Mono',monospace">320kbps / 96kHz</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════ FOOTER ════ -->
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="fb-logo"><span class="r">R</span><span class="g">G</span><span class="r">R</span></div>
+      <div class="fb-tag">Real Music. Genuine Vibes. 24/7.</div>
+      <p class="fb-p">Reaction Genuine Radio — built by Prod Difao. The home of authentic music, original beats, unreleased productions, and independent artists broadcasting 24/7 to the world.</p>
+    </div>
+    <div class="fc"><h4>Listen</h4><ul><li><a href="#listen">Track Catalog</a></li><li><a href="#">Live Stream</a></li><li><a href="#">Podcast Archive</a></li><li><a href="#">RGR Vault</a></li></ul></div>
+    <div class="fc"><h4>Programs</h4><ul><li><a href="#programs">All Shows</a></li><li><a href="#">Morning Beat Session</a></li><li><a href="#">Producer's Corner</a></li><li><a href="#">First Listen Drops</a></li></ul></div>
+    <div class="fc"><h4>Artists</h4><ul><li><a href="#submit">Submit Music</a></li><li><a href="#">RGR Roster</a></li><li><a href="#">Artist Development</a></li><li><a href="#">Contact Prod Difao</a></li></ul></div>
+  </div>
+  <div class="footer-btm">
+    <p>© 2026 Reaction Genuine Radio · Prod Difao. All rights reserved. All music broadcast with full artist permission.</p>
+    <span class="footer-freq">98.7 FM · HD STREAM · WORLDWIDE 24/7</span>
+  </div>
+</footer>
+
+<!-- ════ STREAM SETUP MODAL ════ -->
+<div class="modal-overlay" id="streamModal" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal">
+    <button class="modal-close" onclick="document.getElementById('streamModal').classList.remove('open')">✕</button>
+    <h3>HOW TO GO LIVE</h3>
+    <p class="sub">Step-by-step guide for Prod Difao to publish RGR online and control programming in real time.</p>
+
+    <div class="stream-step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <h4>Create Your Station on Zeno.fm (Free)</h4>
+        <p>Go to <a href="https://zeno.fm" target="_blank">zeno.fm</a> → Create Account → New Station → Name it "Reaction Genuine Radio". You get a public stream URL and an embeddable player instantly. Free tier available.</p>
+      </div>
+    </div>
+    <div class="stream-step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <h4>Upload Your Beats & Songs</h4>
+        <p>In Zeno's dashboard, upload your MP3/WAV files. Create playlists per show (Morning Beat Session, Late Night Vibes, etc.). Set each playlist to auto-schedule at the right times.</p>
+      </div>
+    </div>
+    <div class="stream-step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <h4>Go Live With Your Mic (Exclusive Drops)</h4>
+        <p>Download <strong>BUTT</strong> (Broadcast Using This Tool — free) or <strong>Mixxx</strong> (free DJ software). Enter your Zeno server details — host, port, password — and you can broadcast your voice live, drop exclusives in real time, or mix tracks live.</p>
+      </div>
+    </div>
+    <div class="stream-step">
+      <div class="step-num">4</div>
+      <div class="step-body">
+        <h4>Upgrade to Radio.co for Full Control ($49/mo)</h4>
+        <p>Radio.co gives you a drag-and-drop scheduler, live show management, listener analytics, and a professional player. You can see exactly who's listening and switch shows from a dashboard — like a real radio station.</p>
+      </div>
+    </div>
+    <div class="stream-step">
+      <div class="step-num">5</div>
+      <div class="step-body">
+        <h4>Connect Your Stream to This Website</h4>
+        <p>Once you have your Zeno/Radio.co stream URL (format: <code>https://stream.zeno.fm/yourstation</code>), send it to me and I'll embed a live working player directly into this site so visitors hear RGR the moment they arrive.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<script>
+// ════ TRACK DATA ════
+const TRACKS = [
+  {id:1,title:"Genuine Frequencies Vol. 7",artist:"Prod Difao",show:"Morning Beat Session",genre:"beat",bpm:92,key:"Dm",dur:"4:18",tag:"new",color:"#8B1A1A"},
+  {id:2,title:"No Cap Chronicles",artist:"Prod Difao ft. Verse Prophet",show:"Exclusive First Listen",genre:"exclusive",bpm:94,key:"F#m",dur:"3:44",tag:"exc",color:"#3A1A0A"},
+  {id:3,title:"Crate Digger's Anthem",artist:"Prod Difao",show:"Classic Boom Bap Hour",genre:"boombap",bpm:88,key:"Am",dur:"5:02",tag:"bap",color:"#0A1A3A"},
+  {id:4,title:"Studio Session 44",artist:"Prod Difao",show:"Studio Diaries",genre:"beat",bpm:78,key:"Gm",dur:"3:28",tag:"new",color:"#1A0A1A"},
+  {id:5,title:"Boom Bap Blueprint",artist:"Prod Difao",show:"Producer's Corner",genre:"boombap",bpm:90,key:"Cm",dur:"4:55",tag:"bap",color:"#0A1A0A"},
+  {id:6,title:"Midnight Frequencies",artist:"Prod Difao",show:"Late Night Vibes",genre:"beat",bpm:72,key:"Ebm",dur:"5:30",tag:"new",color:"#1A1A0A"},
+  {id:7,title:"RGR Unreleased 001",artist:"Prod Difao",show:"Exclusive First Listen",genre:"unreleased",bpm:96,key:"Bm",dur:"3:15",tag:"exc",color:"#1A0808"},
+  {id:8,title:"Soul Chop Sessions",artist:"Prod Difao",show:"Producer's Corner",genre:"beat",bpm:85,key:"F",dur:"4:44",tag:"new",color:"#0A0A1A"},
+  {id:9,title:"Kingston Vibration",artist:"Prod Difao",show:"RGR Genuine Showcase",genre:"exclusive",bpm:100,key:"A",dur:"3:58",tag:"exc",color:"#1A0A0A"},
+  {id:10,title:"The Authentic One (Unreleased)",artist:"Prod Difao ft. Lyriq Daze",show:"Exclusive First Listen",genre:"unreleased",bpm:89,key:"Dm",dur:"4:12",tag:"exc",color:"#0A1A1A"},
+  {id:11,title:"Late Night Lo-Fi",artist:"Prod Difao",show:"Late Night Vibes",genre:"beat",bpm:68,key:"Am",dur:"6:02",tag:"new",color:"#1A1A1A"},
+  {id:12,title:"Boom Bap Legends",artist:"Prod Difao",show:"Classic Boom Bap Hour",genre:"boombap",bpm:87,key:"Gm",dur:"4:36",tag:"bap",color:"#0A0A0A"},
+];
+
+// ════ SCHEDULE DATA ════
+const SCHEDULE = [
+  {time:"06:00 AM",show:"Morning Beat Session",host:"Prod Difao",genre:"Instrumentals",status:"live"},
+  {time:"10:00 AM",show:"Producer's Corner",host:"Prod Difao",genre:"Production",status:"next"},
+  {time:"12:00 PM",show:"Exclusive First Listen",host:"RGR Network",genre:"Unreleased",status:""},
+  {time:"02:00 PM",show:"RGR Genuine Showcase",host:"Various Artists",genre:"Independent",status:"gold"},
+  {time:"04:00 PM",show:"Studio Diaries",host:"Prod Difao",genre:"Behind Scenes",status:""},
+  {time:"06:00 PM",show:"Classic Boom Bap Hour",host:"Selecta Flame",genre:"Boom Bap",status:"gold"},
+  {time:"10:00 PM",show:"Late Night Vibes",host:"Prod Difao",genre:"Lo-Fi / Soul",status:""},
+];
+
+// ════ PLAYER STATE ════
+let currentIdx = 0;
+let isPlaying = false;
+let isShuffle = false;
+let isLoop = false;
+let progress = 0;
+let progInterval = null;
+let filteredTracks = [...TRACKS];
+
+// ════ RENDER TRACKS ════
+function renderTracks(list){
+  const tl = document.getElementById('trackList');
+  tl.innerHTML = list.map((t,i)=>`
+    <div class="track-row ${currentIdx===TRACKS.indexOf(t)?'playing-row':''}" onclick="playTrack(${TRACKS.indexOf(t)})" data-genre="${t.genre}">
+      <div class="tr-num"><span class="play-icon">▶</span><span>${i+1}</span></div>
+      <div class="tr-art" style="background:linear-gradient(140deg,${t.color},#050505)">${t.title.slice(0,2).toUpperCase()}</div>
+      <div class="tr-info">
+        <div class="tr-name">${t.title}</div>
+        <div class="tr-meta">${t.artist} · ${t.show} · ${t.bpm} BPM · ${t.key}</div>
+      </div>
+      <div class="tr-tag"><span class="tag-${t.tag}">${t.tag==='exc'?'Exclusive':t.tag==='bap'?'Boom Bap':'New'}</span></div>
+      <div class="tr-dur">${t.dur}</div>
+    </div>`).join('');
+  // Populate queue select
+  const qs = document.getElementById('queueSelect');
+  if(qs) qs.innerHTML = TRACKS.map(t=>`<option value="${t.id}">${t.title} — ${t.artist}</option>`).join('');
+}
+
+function filterTracks(genre, btn){
+  document.querySelectorAll('.f-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  filteredTracks = genre==='all'?[...TRACKS]:TRACKS.filter(t=>t.genre===genre);
+  renderTracks(filteredTracks);
+}
+
+// ════ PLAYER FUNCTIONS ════
+function updatePlayerUI(){
+  const t = TRACKS[currentIdx];
+  document.getElementById('pbTrack').textContent = t.title;
+  document.getElementById('pbArtist').textContent = t.artist;
+  document.getElementById('pbShow').textContent = t.show;
+  document.getElementById('pbArtLabel').textContent = t.title.slice(0,3).toUpperCase();
+  document.getElementById('pbDur').textContent = t.dur;
+  const ni = (currentIdx+1)%TRACKS.length;
+  document.getElementById('pbNextTrack').textContent = TRACKS[ni].title;
+  renderTracks(filteredTracks);
+}
+
+function togglePlay(){
+  isPlaying = !isPlaying;
+  const btn = document.getElementById('mainPlayBtn');
+  btn.innerHTML = isPlaying ? '&#9646;&#9646;' : '&#9654;';
+  btn.classList.toggle('playing', isPlaying);
+  if(isPlaying){
+    clearInterval(progInterval);
+    const totalSecs = parseDur(TRACKS[currentIdx].dur);
+    progInterval = setInterval(()=>{
+      progress += 1/totalSecs * 100;
+      if(progress>=100){progress=0;if(!isLoop)nextTrack();else{progress=0}}
+      updateProgress();
+    },1000);
+    showToast(`▶ Now Playing: ${TRACKS[currentIdx].title}`);
+  } else {
+    clearInterval(progInterval);
+  }
+}
+
+function parseDur(d){const p=d.split(':');return parseInt(p[0])*60+parseInt(p[1])}
+
+function updateProgress(){
+  const pct = Math.min(progress,100);
+  document.getElementById('pbFill').style.width = pct+'%';
+  document.getElementById('pbThumb').style.left = pct+'%';
+  const total = parseDur(TRACKS[currentIdx].dur);
+  const cur = Math.floor(total * pct/100);
+  document.getElementById('pbCur').textContent = fmtTime(cur);
+}
+
+function fmtTime(s){return `${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`}
+
+function seekTo(e){
+  const bar = document.getElementById('pbBar');
+  const rect = bar.getBoundingClientRect();
+  progress = ((e.clientX-rect.left)/rect.width)*100;
+  updateProgress();
+}
+
+function playTrack(idx){
+  currentIdx = idx; progress = 0;
+  updatePlayerUI();
+  if(!isPlaying){togglePlay();}
+  else{
+    clearInterval(progInterval);
+    const totalSecs = parseDur(TRACKS[currentIdx].dur);
+    progInterval = setInterval(()=>{
+      progress += 1/totalSecs*100;
+      if(progress>=100){progress=0;if(!isLoop)nextTrack();}
+      updateProgress();
+    },1000);
+    showToast(`▶ Now Playing: ${TRACKS[currentIdx].title}`);
+  }
+}
+
+function nextTrack(){
+  if(isShuffle) currentIdx=Math.floor(Math.random()*TRACKS.length);
+  else currentIdx=(currentIdx+1)%TRACKS.length;
+  progress=0;
+  updatePlayerUI();
+  if(isPlaying){
+    clearInterval(progInterval);
+    const ts=parseDur(TRACKS[currentIdx].dur);
+    progInterval=setInterval(()=>{progress+=1/ts*100;if(progress>=100){progress=0;nextTrack();}updateProgress();},1000);
+  }
+}
+
+function prevTrack(){
+  if(progress>10){progress=0;updateProgress();return;}
+  currentIdx=(currentIdx-1+TRACKS.length)%TRACKS.length;
+  progress=0;updatePlayerUI();
+}
+
+function toggleShuffle(){
+  isShuffle=!isShuffle;
+  document.getElementById('shuffleBtn').style.color=isShuffle?'var(--gold)':'';
+  showToast(isShuffle?'Shuffle On':'Shuffle Off');
+}
+function toggleLoop(){
+  isLoop=!isLoop;
+  document.getElementById('loopBtn').style.color=isLoop?'var(--gold)':'';
+  showToast(isLoop?'Loop On':'Loop Off');
+}
+function toggleMute(){
+  const vs=document.getElementById('volSlider');
+  vs.value=vs.value>0?0:80;
+  document.querySelector('.pb-vol-icon').textContent=vs.value>0?'🔊':'🔇';
+}
+function setVolume(v){
+  document.querySelector('.pb-vol-icon').textContent=v>0?'🔊':'🔇';
+}
+function setMasterVol(v){
+  document.getElementById('masterVolNum').textContent=v+'%';
+}
+
+// ════ SCHEDULE ════
+function renderSchedule(){
+  const el = document.getElementById('schedRows');
+  el.innerHTML = SCHEDULE.map(s=>`
+    <div class="sched-row ${s.status==='live'?'now':s.status==='gold'?'gold':''}">
+      <div class="sched-time">${s.time}</div>
+      <div>
+        <div class="sched-show">${s.show}</div>
+        <div class="sched-host">${s.host}</div>
+      </div>
+      <div class="sched-genre">${s.genre}</div>
+      <div>${
+        s.status==='live'?'<span class="sched-status st-live">🔴 Live</span>':
+        s.status==='next'?'<span class="sched-status st-next">Up Next</span>':
+        '<span class="sched-status st-sched">Scheduled</span>'
+      }</div>
+    </div>`).join('');
+}
+
+// ════ CONTROL PANEL ════
+function switchShow(){
+  const sel = document.getElementById('showSelect').value;
+  document.getElementById('cpShow').textContent = sel;
+  showToast(`Program switched to: ${sel}`);
+}
+function goLive(){
+  document.getElementById('cpStatus').textContent = '● LIVE (Override)';
+  showToast('🔴 Manual live override activated');
+}
+
+let listenerCount = 247;
+setInterval(()=>{
+  listenerCount += Math.floor(Math.random()*5)-2;
+  listenerCount = Math.max(180,listenerCount);
+  const el = document.getElementById('cpListeners');
+  if(el) el.textContent = listenerCount.toLocaleString()+' online';
+},3000);
+
+function queueTrack(){
+  const sel = document.getElementById('queueSelect');
+  const name = sel.options[sel.selectedIndex].text.split(' — ')[0];
+  showToast(`"${name}" added to queue`);
+}
+
+// ════ SUBMIT FORM ════
+function handleFileSelect(input){
+  if(input.files[0]){
+    const f=input.files[0];
+    document.getElementById('uploadText').innerHTML=`<strong style="color:var(--gold)">✓ File Selected</strong><br>${f.name} (${(f.size/1024/1024).toFixed(1)}MB)`;
+  }
+}
+
+function submitForm(){
+  const artist = document.getElementById('f-artist').value.trim();
+  const track  = document.getElementById('f-track').value.trim();
+  const email  = document.getElementById('f-email').value.trim();
+  const genre  = document.getElementById('f-genre').value;
+  const chkO   = document.getElementById('chk-original').checked;
+  const chkT   = document.getElementById('chk-terms').checked;
+
+  if(!artist||!track||!email||!genre){showToast('Please fill in all required fields');return;}
+  if(!chkO||!chkT){showToast('Please confirm the checkboxes to submit');return;}
+
+  document.getElementById('submissionForm').style.display='none';
+  document.getElementById('submitSuccess').style.display='block';
+  showToast('🎵 Submission received! Thank you, '+artist);
+}
+
+// ════ TOAST ════
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2800);
+}
+
+// ════ NAV ACTIVE ════
+function setActive(el){
+  document.querySelectorAll('.nav-links a').forEach(a=>a.classList.remove('act'));
+  el.classList.add('act');
+}
+
+// ════ HERO EQ ════
+(function(){
+  const c=document.getElementById('hEq');if(!c)return;
+  const ctx=c.getContext('2d');
+  let bars=[];
+  function resize(){
+    c.width=c.offsetWidth;c.height=c.offsetHeight;
+    bars=Array.from({length:Math.floor(c.width/6)},()=>({h:Math.random()*.6+.1,s:Math.random()*.016+.004,p:Math.random()*Math.PI*2}));
+  }
+  function draw(t){
+    ctx.clearRect(0,0,c.width,c.height);
+    bars.forEach((b,i)=>{
+      const amp=(Math.sin(t*b.s+b.p)*.5+.5)*b.h;
+      const bh=amp*c.height*.82+3;
+      const g=ctx.createLinearGradient(0,c.height-bh,0,c.height);
+      g.addColorStop(0,'rgba(201,168,76,0.62)');
+      g.addColorStop(.5,'rgba(139,26,26,0.38)');
+      g.addColorStop(1,'rgba(139,26,26,0.04)');
+      ctx.fillStyle=g;ctx.fillRect(i*6,c.height-bh,4,bh);
+    });
+    requestAnimationFrame(draw);
+  }
+  resize();window.addEventListener('resize',resize);requestAnimationFrame(draw);
+})();
+
+// ════ NOW PLAYING WAVE ════
+(function(){
+  const el=document.getElementById('npWave');if(!el)return;
+  for(let i=0;i<20;i++){
+    const b=document.createElement('div');b.className='wb';
+    b.style.cssText=`height:${Math.random()*24+8}px;--d:${(Math.random()*.45+.35).toFixed(2)}s;--dl:${(Math.random()*.4).toFixed(2)}s`;
+    el.appendChild(b);
+  }
+})();
+
+// ════ INIT ════
+renderTracks(filteredTracks);
+renderSchedule();
+updatePlayerUI();
+document.getElementById('pbDur').textContent = TRACKS[0].dur;
+
+// Scroll spy
+window.addEventListener('scroll',()=>{
+  const sections=['listen','schedule','programs','submit','about'];
+  const offset=120;
+  sections.forEach(id=>{
+    const el=document.getElementById(id);
+    if(!el)return;
+    const top=el.getBoundingClientRect().top;
+    if(top<=offset&&top>-200){
+      document.querySelectorAll('.nav-links a').forEach(a=>a.classList.remove('act'));
+      const link=document.querySelector(`.nav-links a[href="#${id}"]`);
+      if(link)link.classList.add('act');
+    }
+  });
+});
+</script>
+</body>
+</html>
