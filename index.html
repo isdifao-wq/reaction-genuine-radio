@@ -870,11 +870,6 @@ const SCHEDULE = [
 
 // ════ PLAYER STATE ════
 let currentIdx = 0;
-let isPlaying = false;
-let isShuffle = false;
-let isLoop = false;
-let progress = 0;
-let progInterval = null;
 let filteredTracks = [...TRACKS];
 
 // ════ RENDER TRACKS ════
@@ -903,112 +898,157 @@ function filterTracks(genre, btn){
   renderTracks(filteredTracks);
 }
 
-// ════ PLAYER FUNCTIONS ════
+// ════ REAL LIVE STREAM — ZENO.FM ════
+const STREAM_BASE = 'https://stream.zeno.fm/j4vhgzxnvkpuv';
+let audio = null;
+let isPlaying = false;
+let isMuted = false;
+
+// Hide seek bar for live stream
+document.getElementById('pbFill').style.width = '100%';
+document.getElementById('pbFill').style.background = 'linear-gradient(90deg, var(--red-br), var(--gold))';
+document.getElementById('pbThumb').style.display = 'none';
+document.getElementById('pbBar').style.cursor = 'default';
+document.getElementById('pbBar').onclick = null;
+
+function togglePlay(){
+  const btn = document.getElementById('mainPlayBtn');
+  if(!isPlaying){
+    // Create a fresh Audio object every time — forces browser to reconnect stream
+    if(audio){ audio.pause(); audio = null; }
+    audio = new Audio();
+    audio.preload = 'none';
+    // Cache-bust so browser doesn't serve a stale/empty response
+    audio.src = STREAM_BASE + '?t=' + Date.now();
+    audio.volume = document.getElementById('volSlider').value / 100;
+
+    audio.addEventListener('playing', onPlaying);
+    audio.addEventListener('waiting', onWaiting);
+    audio.addEventListener('error',   onError);
+    audio.addEventListener('stalled', onStalled);
+
+    const playPromise = audio.play();
+    if(playPromise !== undefined){
+      playPromise.then(()=>{
+        isPlaying = true;
+        btn.innerHTML = '&#9646;&#9646;';
+        btn.classList.add('playing');
+        showToast('🔴 RGR is LIVE — You\'re tuned in!');
+        startLivePulse();
+      }).catch(e=>{
+        showToast('Tap play again to start stream');
+        console.warn('Play error:', e);
+      });
+    }
+  } else {
+    if(audio){ audio.pause(); audio.src=''; audio=null; }
+    isPlaying = false;
+    btn.innerHTML = '&#9654;';
+    btn.classList.remove('playing');
+    stopLivePulse();
+    showToast('Stream stopped');
+  }
+}
+
+function onPlaying(){
+  document.getElementById('pbCur').textContent = '🔴';
+  document.getElementById('pbDur').textContent = 'LIVE';
+  document.getElementById('pbFill').style.width = '100%';
+}
+function onWaiting(){
+  document.getElementById('pbCur').textContent = '⏳';
+}
+function onError(){
+  showToast('⚠ Stream error — retrying in 3s...');
+  setTimeout(()=>{ if(isPlaying){ isPlaying=false; togglePlay(); } }, 3000);
+}
+function onStalled(){
+  showToast('Reconnecting stream...');
+  setTimeout(()=>{ if(isPlaying){ isPlaying=false; togglePlay(); } }, 2000);
+}
+
+// Animate progress bar as a live pulse when streaming
+let pulseInterval = null;
+function startLivePulse(){
+  let p = 0;
+  pulseInterval = setInterval(()=>{
+    p = (p + 0.4) % 100;
+    document.getElementById('pbFill').style.width = Math.abs(50 - p)*2 + '%';
+  }, 80);
+}
+function stopLivePulse(){
+  clearInterval(pulseInterval);
+  document.getElementById('pbFill').style.width = '100%';
+}
+
+// Audio events attached per-play in togglePlay()
+
+// Volume
+function setVolume(v){
+  if(audio) audio.volume = v / 100;
+  isMuted = v == 0;
+  document.querySelector('.pb-vol-icon').textContent = v > 0 ? '🔊' : '🔇';
+}
+function toggleMute(){
+  const vs = document.getElementById('volSlider');
+  if(!isMuted){
+    vs.value = 0; if(audio) audio.volume = 0; isMuted = true;
+    document.querySelector('.pb-vol-icon').textContent = '🔇';
+  } else {
+    vs.value = 80; if(audio) audio.volume = 0.8; isMuted = false;
+    document.querySelector('.pb-vol-icon').textContent = '🔊';
+  }
+}
+function setMasterVol(v){
+  if(audio) audio.volume = v / 100;
+  document.getElementById('masterVolNum').textContent = v + '%';
+}
+
+// Live stream — next/prev/shuffle/loop not applicable but keep buttons graceful
+function nextTrack(){ showToast('Live stream — no skip available'); }
+function prevTrack(){ showToast('Live stream — no rewind available'); }
+function toggleShuffle(){ showToast('Live stream mode — shuffle not available'); }
+function toggleLoop(){ showToast('Live stream is already continuous 24/7 🔴'); }
+function seekTo(){ /* disabled for live stream */ }
+
+// Update player info display for live stream
 function updatePlayerUI(){
   const t = TRACKS[currentIdx];
-  document.getElementById('pbTrack').textContent = t.title;
-  document.getElementById('pbArtist').textContent = t.artist;
-  document.getElementById('pbShow').textContent = t.show;
-  document.getElementById('pbArtLabel').textContent = t.title.slice(0,3).toUpperCase();
-  document.getElementById('pbDur').textContent = t.dur;
-  const ni = (currentIdx+1)%TRACKS.length;
-  document.getElementById('pbNextTrack').textContent = TRACKS[ni].title;
+  document.getElementById('pbTrack').textContent = '🔴 LIVE — Reaction Genuine Radio';
+  document.getElementById('pbArtist').textContent = 'Prod Difao · Broadcasting 24/7';
+  document.getElementById('pbShow').textContent = getCurrentShow();
+  document.getElementById('pbArtLabel').textContent = 'RGR';
+  document.getElementById('pbDur').textContent = 'LIVE';
+  document.getElementById('pbNextTrack').textContent = 'Live Stream 24/7';
   renderTracks(filteredTracks);
 }
 
-function togglePlay(){
-  isPlaying = !isPlaying;
-  const btn = document.getElementById('mainPlayBtn');
-  btn.innerHTML = isPlaying ? '&#9646;&#9646;' : '&#9654;';
-  btn.classList.toggle('playing', isPlaying);
-  if(isPlaying){
-    clearInterval(progInterval);
-    const totalSecs = parseDur(TRACKS[currentIdx].dur);
-    progInterval = setInterval(()=>{
-      progress += 1/totalSecs * 100;
-      if(progress>=100){progress=0;if(!isLoop)nextTrack();else{progress=0}}
-      updateProgress();
-    },1000);
-    showToast(`▶ Now Playing: ${TRACKS[currentIdx].title}`);
-  } else {
-    clearInterval(progInterval);
-  }
+function getCurrentShow(){
+  const h = new Date().getHours();
+  if(h>=6&&h<10)  return 'Morning Beat Session';
+  if(h>=10&&h<12) return "Producer's Corner";
+  if(h>=12&&h<14) return 'Exclusive First Listen';
+  if(h>=14&&h<16) return 'RGR Genuine Showcase';
+  if(h>=16&&h<18) return 'Studio Diaries';
+  if(h>=18&&h<22) return 'Classic Boom Bap Hour';
+  return 'Late Night Vibes';
 }
 
+// Also wire up the hero play button
 function parseDur(d){const p=d.split(':');return parseInt(p[0])*60+parseInt(p[1])}
-
-function updateProgress(){
-  const pct = Math.min(progress,100);
-  document.getElementById('pbFill').style.width = pct+'%';
-  document.getElementById('pbThumb').style.left = pct+'%';
-  const total = parseDur(TRACKS[currentIdx].dur);
-  const cur = Math.floor(total * pct/100);
-  document.getElementById('pbCur').textContent = fmtTime(cur);
-}
-
 function fmtTime(s){return `${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`}
-
-function seekTo(e){
-  const bar = document.getElementById('pbBar');
-  const rect = bar.getBoundingClientRect();
-  progress = ((e.clientX-rect.left)/rect.width)*100;
-  updateProgress();
-}
+function updateProgress(){} // no-op for live stream
 
 function playTrack(idx){
-  currentIdx = idx; progress = 0;
-  updatePlayerUI();
-  if(!isPlaying){togglePlay();}
-  else{
-    clearInterval(progInterval);
-    const totalSecs = parseDur(TRACKS[currentIdx].dur);
-    progInterval = setInterval(()=>{
-      progress += 1/totalSecs*100;
-      if(progress>=100){progress=0;if(!isLoop)nextTrack();}
-      updateProgress();
-    },1000);
-    showToast(`▶ Now Playing: ${TRACKS[currentIdx].title}`);
-  }
-}
-
-function nextTrack(){
-  if(isShuffle) currentIdx=Math.floor(Math.random()*TRACKS.length);
-  else currentIdx=(currentIdx+1)%TRACKS.length;
-  progress=0;
-  updatePlayerUI();
-  if(isPlaying){
-    clearInterval(progInterval);
-    const ts=parseDur(TRACKS[currentIdx].dur);
-    progInterval=setInterval(()=>{progress+=1/ts*100;if(progress>=100){progress=0;nextTrack();}updateProgress();},1000);
-  }
-}
-
-function prevTrack(){
-  if(progress>10){progress=0;updateProgress();return;}
-  currentIdx=(currentIdx-1+TRACKS.length)%TRACKS.length;
-  progress=0;updatePlayerUI();
-}
-
-function toggleShuffle(){
-  isShuffle=!isShuffle;
-  document.getElementById('shuffleBtn').style.color=isShuffle?'var(--gold)':'';
-  showToast(isShuffle?'Shuffle On':'Shuffle Off');
-}
-function toggleLoop(){
-  isLoop=!isLoop;
-  document.getElementById('loopBtn').style.color=isLoop?'var(--gold)':'';
-  showToast(isLoop?'Loop On':'Loop Off');
-}
-function toggleMute(){
-  const vs=document.getElementById('volSlider');
-  vs.value=vs.value>0?0:80;
-  document.querySelector('.pb-vol-icon').textContent=vs.value>0?'🔊':'🔇';
-}
-function setVolume(v){
-  document.querySelector('.pb-vol-icon').textContent=v>0?'🔊':'🔇';
-}
-function setMasterVol(v){
-  document.getElementById('masterVolNum').textContent=v+'%';
+  // For live stream, clicking a catalog track shows info but plays the live stream
+  currentIdx = idx;
+  const t = TRACKS[idx];
+  document.getElementById('pbTrack').textContent = '🔴 LIVE — ' + t.title;
+  document.getElementById('pbArtist').textContent = t.artist + ' · via RGR Live Stream';
+  document.getElementById('pbShow').textContent = t.show;
+  renderTracks(filteredTracks);
+  if(!isPlaying) togglePlay();
+  else showToast('▶ Now featuring: ' + t.title);
 }
 
 // ════ SCHEDULE ════
@@ -1130,8 +1170,18 @@ function setActive(el){
 // ════ INIT ════
 renderTracks(filteredTracks);
 renderSchedule();
-updatePlayerUI();
-document.getElementById('pbDur').textContent = TRACKS[0].dur;
+// Live stream init — set player UI
+document.getElementById('pbTrack').textContent  = '🔴 LIVE — Reaction Genuine Radio';
+document.getElementById('pbArtist').textContent = 'Prod Difao · Broadcasting 24/7';
+document.getElementById('pbShow').textContent   = getCurrentShow();
+document.getElementById('pbArtLabel').textContent = 'RGR';
+document.getElementById('pbDur').textContent    = 'LIVE';
+document.getElementById('pbCur').textContent    = '●';
+document.getElementById('pbFill').style.width   = '100%';
+document.getElementById('pbFill').style.background = 'linear-gradient(90deg, var(--red-br), var(--gold))';
+document.getElementById('pbThumb').style.display = 'none';
+document.getElementById('pbNextTrack').textContent = 'Live Stream 24/7';
+setInterval(()=>{ document.getElementById('pbShow').textContent = getCurrentShow(); }, 60000);
 
 // Scroll spy
 window.addEventListener('scroll',()=>{
