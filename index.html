@@ -469,13 +469,13 @@ footer{background:#040404;border-top:1px solid var(--border);padding:56px 48px 3
     <span>EXCLUSIVE: Unreleased Boom Bap Session dropping this Friday <span class="d">◆</span></span>
     <span>SUBMIT YOUR MUSIC: reactiongenuineradio.com/submit <span class="d">◆</span></span>
     <span>PRODUCER'S CORNER — Tonight 8PM: Beat Breakdown with Prod Difao <span class="d">◆</span></span>
-    <span>CLASSIC BOOM BAP HOUR — Fridays 6PM EST <span class="d">◆</span></span>
+    <span>UNDERGROUND RAP — Weeknights 8PM | Raw & Real Hip-Hop <span class="d">◆</span></span>
     <span>RGR SHOWCASE — Independent artists, submit now and get aired <span class="d">◆</span></span>
     <span>NOW PLAYING: Genuine Frequencies Vol. 7 — Prod Difao <span class="d">◆</span></span>
     <span>EXCLUSIVE: Unreleased Boom Bap Session dropping this Friday <span class="d">◆</span></span>
     <span>SUBMIT YOUR MUSIC: reactiongenuineradio.com/submit <span class="d">◆</span></span>
     <span>PRODUCER'S CORNER — Tonight 8PM: Beat Breakdown with Prod Difao <span class="d">◆</span></span>
-    <span>CLASSIC BOOM BAP HOUR — Fridays 6PM EST <span class="d">◆</span></span>
+    <span>UNDERGROUND RAP — Weeknights 8PM | Raw & Real Hip-Hop <span class="d">◆</span></span>
     <span>RGR SHOWCASE — Independent artists, submit now and get aired <span class="d">◆</span></span>
   </div>
 </div>
@@ -566,6 +566,7 @@ footer{background:#040404;border-top:1px solid var(--border);padding:56px 48px 3
         <span class="ctrl-label">Now Broadcasting</span>
         <div class="ctrl-stat"><span class="cs-key">Status</span><span class="cs-val live" id="cpStatus">● LIVE</span></div>
         <div class="ctrl-stat"><span class="cs-key">Current Show</span><span class="cs-val gold" id="cpShow">Morning Beat Session</span></div>
+        <div class="ctrl-stat"><span class="cs-key">Now Playing</span><span class="cs-val" id="cpCurrentTrack" style="font-size:10px;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Loading...</span></div>
         <div class="ctrl-stat"><span class="cs-key">Host</span><span class="cs-val" id="cpHost">Prod Difao</span></div>
         <div class="ctrl-stat"><span class="cs-key">Listeners</span><span class="cs-val" id="cpListeners">—</span></div>
       </div>
@@ -578,9 +579,9 @@ footer{background:#040404;border-top:1px solid var(--border);padding:56px 48px 3
           <option>Morning Beat Session</option>
           <option>Producer's Corner</option>
           <option>Exclusive First Listen</option>
-          <option>RGR Genuine Showcase</option>
           <option>Studio Diaries</option>
-          <option>Classic Boom Bap Hour</option>
+          <option>RGR Genuine Showcase</option>
+          <option>Underground Rap</option>
           <option>Late Night Vibes</option>
         </select>
         <button class="ctrl-btn" onclick="switchShow()">▶ Switch to Selected Show</button>
@@ -623,10 +624,10 @@ footer{background:#040404;border-top:1px solid var(--border);padding:56px 48px 3
     <div class="prog-card"><div class="prog-num">01</div><div class="prog-time">06:00 AM</div><div class="prog-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#C9A84C" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg></div><div class="prog-name">Morning Beat Session</div><div class="prog-desc">Start the day with wall-to-wall instrumentals — boom bap, lo-fi, jazz-influenced hip-hop beats by Prod Difao and guests.</div><span class="prog-tag">Instrumentals · Hip-Hop Beats</span></div>
     <div class="prog-card"><div class="prog-num">02</div><div class="prog-time">10:00 AM</div><div class="prog-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#C9A84C" stroke-width="1.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div><div class="prog-name">Producer's Corner</div><div class="prog-desc">Beat breakdowns, sample chop walkthroughs, and drum programming tips. Prod Difao opens up the process live on air.</div><span class="prog-tag">Production Tips · Beat Breakdowns</span></div>
     <div class="prog-card"><div class="prog-num">03</div><div class="prog-time">12:00 PM</div><div class="prog-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#C9A84C" stroke-width="1.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div><div class="prog-name">Exclusive First Listen</div><div class="prog-desc">Unreleased songs and album previews — heard on RGR before any streaming platform. Prod Difao drops exclusively here first.</div><span class="prog-tag">Unreleased · World Premieres</span></div>
-    <div class="prog-card"><div class="prog-num">04</div><div class="prog-time">02:00 PM</div><div class="prog-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#C9A84C" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><div class="prog-name">RGR Genuine Showcase</div><div class="prog-desc">Music from independent artists who submitted to RGR. If you made it real, we play it real. The heartbeat of the station.</div><span class="prog-tag">Independent Artists · Submissions</span></div>
-    <div class="prog-card"><div class="prog-num">05</div><div class="prog-time">04:00 PM</div><div class="prog-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#C9A84C" stroke-width="1.5"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg></div><div class="prog-name">Studio Diaries</div><div class="prog-desc">Behind-the-scenes from the recording booth. In-session recordings, engineer talk, and real conversations about the craft.</div><span class="prog-tag">Behind the Scenes · Recording</span></div>
-    <div class="prog-card"><div class="prog-num">06</div><div class="prog-time">06:00 PM</div><div class="prog-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#C9A84C" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg></div><div class="prog-name">Classic Boom Bap Hour</div><div class="prog-desc">Paying homage to the records that built the foundation. Two hours for the golden era, the underground legends, and the crate.</div><span class="prog-tag">Classic Hip-Hop · Legacy</span></div>
-    <div class="prog-card"><div class="prog-num">07</div><div class="prog-time">10:00 PM</div><div class="prog-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#C9A84C" stroke-width="1.5"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></div><div class="prog-name">Late Night Vibes</div><div class="prog-desc">Relaxed beats, soulful productions, and smooth hip-hop for when the lights go low. The city never sleeps and neither does RGR.</div><span class="prog-tag">Lo-Fi · Soul · Late Night</span></div>
+    <div class="prog-card"><div class="prog-num">04</div><div class="prog-time">04:00 PM</div><div class="prog-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#C9A84C" stroke-width="1.5"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg></div><div class="prog-name">Studio Diaries</div><div class="prog-desc">Behind-the-scenes from the recording booth. In-session recordings, engineer conversations, and real talk about what it takes to make music at the highest independent level.</div><span class="prog-tag">Behind the Scenes · Recording Sessions</span></div>
+    <div class="prog-card"><div class="prog-num">05</div><div class="prog-time">06:00 PM</div><div class="prog-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#C9A84C" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><div class="prog-name">RGR Genuine Showcase</div><div class="prog-desc">The platform for independent artists submitted to RGR. Real music from real artists — if you made it genuine, we put it on air for the world to hear. Submit your music and get your shot.</div><span class="prog-tag">Independent Artists · Submissions</span></div>
+    <div class="prog-card"><div class="prog-num">06</div><div class="prog-time">08:00 PM</div><div class="prog-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#C9A84C" stroke-width="1.5"><path d="M9 18V5l12-3v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="15" r="3"/></svg></div><div class="prog-name">Underground Rap</div><div class="prog-desc">Raw underground rap, street anthems, and hard boom bap. The realest voices in hip-hop get their platform here — no mainstream, no filters, just pure rap music.</div><span class="prog-tag">Underground Hip-Hop · Street</span></div>
+    <div class="prog-card"><div class="prog-num">07</div><div class="prog-time">10:00 PM — 6:00 AM</div><div class="prog-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#C9A84C" stroke-width="1.5"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></div><div class="prog-name">Late Night Vibes</div><div class="prog-desc">Relaxed beats, soulful productions, and smooth hip-hop for when the lights go low. The city never sleeps and neither does RGR.</div><span class="prog-tag">Lo-Fi · Soul · Late Night</span></div>
   </div>
 </section>
 
@@ -677,12 +678,13 @@ footer{background:#040404;border-top:1px solid var(--border);padding:56px 48px 3
           <label class="form-label">Suggested Program Slot</label>
           <select class="form-select" id="f-show">
             <option value="">Let RGR decide (recommended)</option>
-            <option>Morning Beat Session</option>
-            <option>Producer's Corner</option>
-            <option>Exclusive First Listen</option>
-            <option>RGR Genuine Showcase</option>
-            <option>Classic Boom Bap Hour</option>
-            <option>Late Night Vibes</option>
+            <option>Morning Beat Session (6AM–10AM)</option>
+            <option>Producer's Corner (10AM–12PM)</option>
+            <option>Exclusive First Listen (12PM–4PM)</option>
+            <option>Studio Diaries (4PM–6PM)</option>
+            <option>RGR Genuine Showcase (6PM–8PM)</option>
+            <option>Underground Rap (8PM–10PM)</option>
+            <option>Late Night Vibes (10PM–6AM)</option>
           </select>
         </div>
         <div class="form-group">
@@ -845,7 +847,7 @@ footer{background:#040404;border-top:1px solid var(--border);padding:56px 48px 3
 const TRACKS = [
   {id:1,title:"Genuine Frequencies Vol. 7",artist:"Prod Difao",show:"Morning Beat Session",genre:"beat",bpm:92,key:"Dm",dur:"4:18",tag:"new",color:"#8B1A1A"},
   {id:2,title:"No Cap Chronicles",artist:"Prod Difao ft. Verse Prophet",show:"Exclusive First Listen",genre:"exclusive",bpm:94,key:"F#m",dur:"3:44",tag:"exc",color:"#3A1A0A"},
-  {id:3,title:"Crate Digger's Anthem",artist:"Prod Difao",show:"Classic Boom Bap Hour",genre:"boombap",bpm:88,key:"Am",dur:"5:02",tag:"bap",color:"#0A1A3A"},
+  {id:3,title:"Crate Digger's Anthem",artist:"Prod Difao",show:"Underground Rap",genre:"boombap",bpm:88,key:"Am",dur:"5:02",tag:"bap",color:"#0A1A3A"},
   {id:4,title:"Studio Session 44",artist:"Prod Difao",show:"Studio Diaries",genre:"beat",bpm:78,key:"Gm",dur:"3:28",tag:"new",color:"#1A0A1A"},
   {id:5,title:"Boom Bap Blueprint",artist:"Prod Difao",show:"Producer's Corner",genre:"boombap",bpm:90,key:"Cm",dur:"4:55",tag:"bap",color:"#0A1A0A"},
   {id:6,title:"Midnight Frequencies",artist:"Prod Difao",show:"Late Night Vibes",genre:"beat",bpm:72,key:"Ebm",dur:"5:30",tag:"new",color:"#1A1A0A"},
@@ -854,18 +856,18 @@ const TRACKS = [
   {id:9,title:"Kingston Vibration",artist:"Prod Difao",show:"RGR Genuine Showcase",genre:"exclusive",bpm:100,key:"A",dur:"3:58",tag:"exc",color:"#1A0A0A"},
   {id:10,title:"The Authentic One (Unreleased)",artist:"Prod Difao ft. Lyriq Daze",show:"Exclusive First Listen",genre:"unreleased",bpm:89,key:"Dm",dur:"4:12",tag:"exc",color:"#0A1A1A"},
   {id:11,title:"Late Night Lo-Fi",artist:"Prod Difao",show:"Late Night Vibes",genre:"beat",bpm:68,key:"Am",dur:"6:02",tag:"new",color:"#1A1A1A"},
-  {id:12,title:"Boom Bap Legends",artist:"Prod Difao",show:"Classic Boom Bap Hour",genre:"boombap",bpm:87,key:"Gm",dur:"4:36",tag:"bap",color:"#0A0A0A"},
+  {id:12,title:"Boom Bap Legends",artist:"Prod Difao",show:"Underground Rap",genre:"boombap",bpm:87,key:"Gm",dur:"4:36",tag:"bap",color:"#0A0A0A"},
 ];
 
 // ════ SCHEDULE DATA ════
 const SCHEDULE = [
-  {time:"06:00 AM",show:"Morning Beat Session",host:"Prod Difao",genre:"Instrumentals",status:"live"},
-  {time:"10:00 AM",show:"Producer's Corner",host:"Prod Difao",genre:"Production",status:"next"},
-  {time:"12:00 PM",show:"Exclusive First Listen",host:"RGR Network",genre:"Unreleased",status:""},
-  {time:"02:00 PM",show:"RGR Genuine Showcase",host:"Various Artists",genre:"Independent",status:"gold"},
-  {time:"04:00 PM",show:"Studio Diaries",host:"Prod Difao",genre:"Behind Scenes",status:""},
-  {time:"06:00 PM",show:"Classic Boom Bap Hour",host:"Selecta Flame",genre:"Boom Bap",status:"gold"},
-  {time:"10:00 PM",show:"Late Night Vibes",host:"Prod Difao",genre:"Lo-Fi / Soul",status:""},
+  {time:"6:00 AM",  end:10, show:"Morning Beat Session",    host:"Prod Difao",      genre:"Hip-Hop Beats",   desc:"Instrumentals & original beats to start the day"},
+  {time:"10:00 AM", end:12, show:"Producer's Corner",       host:"Prod Difao",      genre:"Production",      desc:"Beat breakdowns, tips & production sessions"},
+  {time:"12:00 PM", end:16, show:"Exclusive First Listen",  host:"RGR Network",     genre:"Unreleased",      desc:"World premiere unreleased songs & exclusives"},
+  {time:"4:00 PM",  end:18, show:"Studio Diaries",          host:"Prod Difao",      genre:"Behind the Scenes",desc:"Behind-the-scenes recording sessions"},
+  {time:"6:00 PM",  end:20, show:"RGR Genuine Showcase",    host:"Various Artists", genre:"Independent",     desc:"Platform for independent artists submitted to RGR"},
+  {time:"8:00 PM",  end:22, show:"Underground Rap",         host:"Prod Difao",      genre:"Underground Hip-Hop",desc:"Raw underground rap, boom bap & street music"},
+  {time:"10:00 PM", end:6,  show:"Late Night Vibes",        host:"Prod Difao",      genre:"Lo-Fi / Soul",    desc:"Relaxed beats & soulful productions through the night"},
 ];
 
 // ════ PLAYER STATE ════
@@ -983,6 +985,50 @@ function stopLivePulse(){
 
 // Audio events attached per-play in togglePlay()
 
+// ════ LIVE METADATA FROM ZENO ════
+// Zeno provides a now-playing JSON endpoint we poll every 10 seconds
+const ZENO_META_URL = 'https://api.zeno.fm/mounts/metadata/subscribe/j4vhgzxnvkpuv';
+
+function fetchNowPlaying(){
+  fetch('https://api.zeno.fm/mounts/metadata/subscribe/j4vhgzxnvkpuv', {cache:'no-store'})
+    .then(r=>r.json())
+    .then(data=>{
+      // Zeno metadata format: {streamTitle: "Artist - Title"}
+      const raw = data.streamTitle || data.title || data.stream_title || '';
+      if(raw && raw.trim() !== ''){
+        let artist = 'Prod Difao';
+        let title  = raw;
+        if(raw.includes(' - ')){
+          const parts = raw.split(' - ');
+          artist = parts[0].trim();
+          title  = parts.slice(1).join(' - ').trim();
+        }
+        // Update player bar
+        document.getElementById('pbTrack').textContent  = title || '🔴 LIVE';
+        document.getElementById('pbArtist').textContent = artist + ' · RGR Live';
+        // Update now-playing section card
+        const npTi = document.getElementById('npTitle');
+        const npAr = document.getElementById('npArtist');
+        if(npTi) npTi.textContent = title;
+        if(npAr) npAr.textContent = artist + ' · Now Playing Live on RGR';
+        // Update control panel
+        const cpTrack = document.getElementById('cpCurrentTrack');
+        if(cpTrack) cpTrack.textContent = title + ' — ' + artist;
+      }
+    })
+    .catch(()=>{
+      // Fallback — try alternative Zeno endpoint format
+      fetch('https://stream.zeno.fm/j4vhgzxnvkpuv/status', {cache:'no-store'})
+        .then(r=>r.text())
+        .then(t=>{ if(t) console.log('Zeno status:', t); })
+        .catch(()=>{});
+    });
+}
+
+// Poll every 10 seconds for live track updates
+fetchNowPlaying();
+setInterval(fetchNowPlaying, 10000);
+
 // Volume
 function setVolume(v){
   if(audio) audio.volume = v / 100;
@@ -1025,13 +1071,35 @@ function updatePlayerUI(){
 
 function getCurrentShow(){
   const h = new Date().getHours();
-  if(h>=6&&h<10)  return 'Morning Beat Session';
-  if(h>=10&&h<12) return "Producer's Corner";
-  if(h>=12&&h<14) return 'Exclusive First Listen';
-  if(h>=14&&h<16) return 'RGR Genuine Showcase';
-  if(h>=16&&h<18) return 'Studio Diaries';
-  if(h>=18&&h<22) return 'Classic Boom Bap Hour';
-  return 'Late Night Vibes';
+  if(h>=6  && h<10) return 'Morning Beat Session';
+  if(h>=10 && h<12) return "Producer's Corner";
+  if(h>=12 && h<16) return 'Exclusive First Listen';
+  if(h>=16 && h<18) return 'Studio Diaries';
+  if(h>=18 && h<20) return 'RGR Genuine Showcase';
+  if(h>=20 && h<22) return 'Underground Rap';
+  return 'Late Night Vibes'; // 10PM - 6AM
+}
+
+function getShowProgress(){
+  const now = new Date();
+  const h = now.getHours(), m = now.getMinutes();
+  const slots = [
+    {start:6,end:10,show:'Morning Beat Session'},
+    {start:10,end:12,show:"Producer's Corner"},
+    {start:12,end:16,show:'Exclusive First Listen'},
+    {start:16,end:18,show:'Studio Diaries'},
+    {start:18,end:20,show:'RGR Genuine Showcase'},
+    {start:20,end:22,show:'Underground Rap'},
+    {start:22,end:30,show:'Late Night Vibes'},
+  ];
+  for(const s of slots){
+    if(h>=s.start && h<s.end){
+      const total=(s.end-s.start)*60;
+      const done=(h-s.start)*60+m;
+      return Math.round((done/total)*100);
+    }
+  }
+  return 0;
 }
 
 // Also wire up the hero play button
@@ -1052,29 +1120,49 @@ function playTrack(idx){
 }
 
 // ════ SCHEDULE ════
+function getScheduleStatus(showName){
+  const cur = getCurrentShow();
+  const idx = SCHEDULE.findIndex(s=>s.show===showName);
+  const curIdx = SCHEDULE.findIndex(s=>s.show===cur);
+  if(showName===cur) return 'live';
+  if(idx===curIdx+1||(curIdx===SCHEDULE.length-1&&idx===0)) return 'next';
+  return '';
+}
+
 function renderSchedule(){
   const el = document.getElementById('schedRows');
-  el.innerHTML = SCHEDULE.map(s=>`
-    <div class="sched-row ${s.status==='live'?'now':s.status==='gold'?'gold':''}">
+  if(!el) return;
+  el.innerHTML = SCHEDULE.map((s,i)=>{
+    const st = getScheduleStatus(s.show);
+    const isLive = st==='live';
+    const isNext = st==='next';
+    const prog = isLive ? getShowProgress() : 0;
+    return `
+    <div class="sched-row ${isLive?'now':isNext?'gold':''}">
       <div class="sched-time">${s.time}</div>
-      <div>
+      <div style="min-width:0">
         <div class="sched-show">${s.show}</div>
-        <div class="sched-host">${s.host}</div>
+        <div class="sched-host">${s.host} · ${s.desc}</div>
+        ${isLive?`<div style="margin-top:6px;height:3px;background:rgba(255,255,255,0.08);border-radius:2px"><div style="height:100%;width:${prog}%;background:linear-gradient(90deg,var(--gold),var(--red-br));border-radius:2px;transition:width 1s"></div></div>`:''}
       </div>
       <div class="sched-genre">${s.genre}</div>
       <div>${
-        s.status==='live'?'<span class="sched-status st-live">🔴 Live</span>':
-        s.status==='next'?'<span class="sched-status st-next">Up Next</span>':
+        isLive?'<span class="sched-status st-live">🔴 Live</span>':
+        isNext?'<span class="sched-status st-next">Up Next</span>':
         '<span class="sched-status st-sched">Scheduled</span>'
       }</div>
-    </div>`).join('');
+    </div>`;
+  }).join('');
 }
+// Refresh schedule every 60 seconds so live/next status stays accurate
+setInterval(renderSchedule, 60000);
 
 // ════ CONTROL PANEL ════
 function switchShow(){
   const sel = document.getElementById('showSelect').value;
   document.getElementById('cpShow').textContent = sel;
-  showToast(`Program switched to: ${sel}`);
+  document.getElementById('pbShow').textContent = sel;
+  showToast(`🎙 Program switched to: ${sel}`);
 }
 function goLive(){
   document.getElementById('cpStatus').textContent = '● LIVE (Override)';
@@ -1104,19 +1192,74 @@ function handleFileSelect(input){
 }
 
 function submitForm(){
-  const artist = document.getElementById('f-artist').value.trim();
-  const track  = document.getElementById('f-track').value.trim();
-  const email  = document.getElementById('f-email').value.trim();
-  const genre  = document.getElementById('f-genre').value;
-  const chkO   = document.getElementById('chk-original').checked;
-  const chkT   = document.getElementById('chk-terms').checked;
+  const artist  = document.getElementById('f-artist').value.trim();
+  const track   = document.getElementById('f-track').value.trim();
+  const email   = document.getElementById('f-email').value.trim();
+  const genre   = document.getElementById('f-genre').value;
+  const show    = document.getElementById('f-show').value;
+  const link    = document.getElementById('f-link').value.trim();
+  const bio     = document.getElementById('f-bio').value.trim();
+  const chkO    = document.getElementById('chk-original').checked;
+  const chkT    = document.getElementById('chk-terms').checked;
 
-  if(!artist||!track||!email||!genre){showToast('Please fill in all required fields');return;}
-  if(!chkO||!chkT){showToast('Please confirm the checkboxes to submit');return;}
+  if(!artist||!track||!email||!genre){
+    showToast('⚠ Please fill in all required fields'); return;
+  }
+  if(!chkO||!chkT){
+    showToast('⚠ Please confirm both checkboxes to submit'); return;
+  }
 
-  document.getElementById('submissionForm').style.display='none';
-  document.getElementById('submitSuccess').style.display='block';
-  showToast('🎵 Submission received! Thank you, '+artist);
+  // Show loading state
+  const btn = document.querySelector('.btn-submit');
+  btn.textContent = '⏳ Sending...';
+  btn.disabled = true;
+
+  // Send to Formspree as JSON → delivers to reactiongenuinerecords@gmail.com
+  const payload = {
+    'Artist_Producer_Name': artist,
+    'Track_Title': track,
+    'Artist_Email': email,
+    'Genre': genre,
+    'Requested_Show_Slot': show || 'Let RGR Decide',
+    'SoundCloud_Link': link || 'Not provided',
+    'About_the_Music': bio || 'Not provided',
+    '_subject': '🎵 New RGR Music Submission: ' + track + ' by ' + artist,
+    '_replyto': email
+  };
+
+  fetch('https://formspree.io/f/mlgyngaw', {
+    method: 'POST',
+    body: JSON.stringify(payload),
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    }
+  })
+  .then(r => r.json())
+  .then(data => {
+    if(data.ok || data.next){
+      document.getElementById('submissionForm').style.display='none';
+      document.getElementById('submitSuccess').style.display='block';
+      showToast('🎵 Submitted! Prod Difao will be in touch.');
+    } else {
+      console.error('Formspree error:', data);
+      showToast('⚠ Error sending — please try again or email reactiongenuinerecords@gmail.com');
+      btn.textContent='🎙 Submit to Reaction Genuine Radio';
+      btn.disabled=false;
+    }
+  })
+  .catch(err => {
+    console.error('Network error:', err);
+    showToast('⚠ Network error — please email reactiongenuinerecords@gmail.com directly');
+    btn.textContent='🎙 Submit to Reaction Genuine Radio';
+    btn.disabled=false;
+  })
+  .finally(()=>{
+    // Only re-enable if not already shown success
+    if(document.getElementById('submissionForm').style.display !== 'none') return;
+    btn.textContent='🎙 Submit to Reaction Genuine Radio';
+    btn.disabled=false;
+  });
 }
 
 // ════ TOAST ════
@@ -1174,6 +1317,7 @@ renderSchedule();
 document.getElementById('pbTrack').textContent  = '🔴 LIVE — Reaction Genuine Radio';
 document.getElementById('pbArtist').textContent = 'Prod Difao · Broadcasting 24/7';
 document.getElementById('pbShow').textContent   = getCurrentShow();
+document.getElementById('cpShow').textContent = getCurrentShow();
 document.getElementById('pbArtLabel').textContent = 'RGR';
 document.getElementById('pbDur').textContent    = 'LIVE';
 document.getElementById('pbCur').textContent    = '●';
